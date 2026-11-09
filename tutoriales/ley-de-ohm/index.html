@@ -18,7 +18,7 @@
     /* Voz natural sin servidor: la app pide la voz a /api/tts, que no existe en GitHub Pages.
        Aquí se responde con narraciones pregrabadas (voz/<voz>/<sha1 del texto>.mp3). */
     (function(){
-      var VOZ={Kore:'dora',Zephyr:'dora',Puck:'alex',Fenrir:'alex'};
+      var VOZ={};
       var base=new URL('./voz/',document.baseURI||location.href).href;
       var orig=window.fetch.bind(window);
       function b64(buf){var s='',b=new Uint8Array(buf),n=0x8000;for(var i=0;i<b.length;i+=n)s+=String.fromCharCode.apply(null,b.subarray(i,i+n));return btoa(s);}
@@ -27,7 +27,7 @@
         var url=typeof u==='string'?u:(u&&u.url)||'';
         if(url.indexOf('/api/tts')<0)return orig(u,o);
         return (async function(){
-          try{var q=JSON.parse(o&&o.body||'{}'),h=await sha1(q.text||''),v=VOZ[q.voiceName]||'dora';
+          try{var q=JSON.parse(o&&o.body||'{}'),h=await sha1(q.text||''),v=VOZ[q.voiceName]||'jorge';
             var r=await orig(base+v+'/'+h+'.mp3');if(!r.ok)throw 0;
             return new Response(JSON.stringify({success:true,audioBase64:b64(await r.arrayBuffer())}),{headers:{'Content-Type':'application/json'}});
           }catch(e){return new Response(JSON.stringify({success:false}),{status:404,headers:{'Content-Type':'application/json'}});}
