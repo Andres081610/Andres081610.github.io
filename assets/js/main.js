@@ -3,6 +3,12 @@
   var mb=document.querySelector('[data-menu]'),nav=document.querySelector('[data-nav]');
   if(mb)mb.onclick=function(){var o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o)};
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // modo claro / oscuro (se recuerda la elección)
+  var tb=document.querySelector('[data-theme-toggle]'),tm=document.querySelector('meta[name=theme-color]');
+  function setTheme(t){if(t==='light')document.documentElement.dataset.theme='light';else delete document.documentElement.dataset.theme;
+    if(tm)tm.content=t==='light'?'#f6f8fb':'#0d1117';try{localStorage.setItem('tema',t)}catch(e){}}
+  if(tb)tb.onclick=function(){setTheme(document.documentElement.dataset.theme==='light'?'dark':'light')};
+  function rgb(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
   // formulario de tutorías → correo prellenado
   var tf=document.querySelector('[data-tform]');
   if(tf){document.querySelectorAll('[data-plan]').forEach(function(a){a.addEventListener('click',function(){var m=tf.querySelector('[name=modalidad]');if(m)m.value=a.dataset.plan})});
@@ -31,7 +37,7 @@
   var cv=document.querySelector('[data-circuit]');
   if(cv&&cv.getContext){var cx=cv.getContext('2d'),W,H,G=32,tr=[],dpr=Math.min(devicePixelRatio||1,2);
     function size(){W=cv.offsetWidth;H=cv.offsetHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
-    function nt(){var x=Math.round(Math.random()*W/G)*G,y=Math.round(Math.random()*H/G)*G,c=Math.random()<.7?'0,240,255':'255,43,214';
+    function nt(){var x=Math.round(Math.random()*W/G)*G,y=Math.round(Math.random()*H/G)*G,c=Math.random()<.7?rgb('--cyan-rgb'):rgb('--mag-rgb');
       return{p:[[x,y]],c:c,life:0,max:20+Math.random()*30}}
     size();addEventListener('resize',size);for(var i=0;i<26;i++)tr.push(nt());
     function step(){cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,.08)';cx.fillRect(0,0,W,H);cx.globalCompositeOperation='source-over';
