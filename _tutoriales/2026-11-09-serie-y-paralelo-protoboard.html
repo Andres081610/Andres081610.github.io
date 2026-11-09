@@ -1,0 +1,744 @@
+---
+titulo: "Serie y paralelo en protoboard: resistencias y condensadores"
+resumen: "Cuatro montajes explicados desde cero: qué pasa dentro del circuito, cómo se arma hueco por hueco y cómo medir voltaje y corriente con un solo multímetro. Cambia tus valores y todo se recalcula."
+date: 2026-11-09
+layout: guia
+nivel: "Básico"
+duracion: "2 h de laboratorio"
+tags: [laboratorio, protoboard, multímetro, analógica]
+requisitos: ["Protoboard", "Fuente DC de 9 V o batería de 9 V", "Multímetro digital", "Resistencias de 1 kΩ, 2,2 kΩ y 3,3 kΩ", "Condensadores de 100, 220 y 470 µF"]
+---
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="gRes" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4e2bb"/><stop offset=".45" stop-color="#dcc08a"/><stop offset="1" stop-color="#ad8c52"/></linearGradient>
+  <linearGradient id="gCap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b8bd6"/><stop offset=".4" stop-color="#2b58a6"/><stop offset="1" stop-color="#132d5c"/></linearGradient>
+  <linearGradient id="gCapS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f4f6"/><stop offset=".5" stop-color="#c8d0d6"/><stop offset="1" stop-color="#8e989f"/></linearGradient>
+  <linearGradient id="gBoot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f26a3f"/><stop offset="1" stop-color="#b9361b"/></linearGradient>
+  <linearGradient id="gFace" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d4247"/><stop offset="1" stop-color="#222629"/></linearGradient>
+  <radialGradient id="gKnob" cx=".38" cy=".35" r=".75"><stop offset="0" stop-color="#5a6067"/><stop offset="1" stop-color="#121417"/></radialGradient>
+  <linearGradient id="gLcd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6dfc6"/><stop offset="1" stop-color="#b6c3a0"/></linearGradient>
+  <linearGradient id="gProbeR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ef5a48"/><stop offset=".55" stop-color="#c8281b"/><stop offset="1" stop-color="#8a160d"/></linearGradient>
+  <linearGradient id="gProbeK" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5b6168"/><stop offset=".55" stop-color="#25292d"/><stop offset="1" stop-color="#0b0c0d"/></linearGradient>
+  <linearGradient id="gMetal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f4f6f7"/><stop offset="1" stop-color="#858e94"/></linearGradient>
+  <linearGradient id="gPsu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dfe2e5"/><stop offset="1" stop-color="#a5abb0"/></linearGradient>
+  <linearGradient id="gBoard" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f7f4"/><stop offset="1" stop-color="#e9e9e3"/></linearGradient>
+</defs></svg>
+
+<section id="materiales" data-toc="Materiales">
+  <div class="eyebrow">Antes de empezar</div>
+  <h2>Materiales</h2>
+  <div class="grid2">
+    <div class="gcard"><h3>Equipos</h3>
+      <ul>
+        <li>Protoboard (830 puntos o similar).</li>
+        <li>Fuente DC de laboratorio ajustada a <b>9 V</b>, con límite de corriente en <b>0,10 A</b> (o una batería de 9 V).</li>
+        <li><b>Un multímetro digital</b> con V⎓, mA⎓, Ω y capacímetro, si lo tiene.</li>
+        <li>Cables jumper y el cronómetro del celular.</li>
+      </ul>
+    </div>
+    <div class="gcard"><h3>Componentes</h3>
+      <ul>
+        <li>Resistencias de ¼ W: <b>1 kΩ, 2,2 kΩ y 3,3 kΩ</b>.</li>
+        <li>Resistencias de carga: <b>100 kΩ</b> (montaje 3) y <b>10 kΩ</b> (montaje 4).</li>
+        <li>Condensadores electrolíticos: <b>100 µF, 220 µF y 470 µF</b>, de 16 V o más.</li>
+        <li>Una resistencia de 1 kΩ extra para descargar los condensadores.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout"><div class="t">Cómo reconocer tus resistencias por sus colores</div>
+    <div class="bands" id="bandsOut"></div>
+    <p style="font-size:14px;color:var(--muted)">Se leen con la banda dorada a la derecha. Banda 1 y banda 2 son los dos primeros dígitos; la banda 3 dice cuántos ceros se agregan; la dorada es la tolerancia (±5 %).</p>
+  </div>
+</section>
+
+<!-- ============ AGUA ============ -->
+<section id="agua" data-toc="La idea con agua">
+  <div class="eyebrow">Para entenderlo sin fórmulas</div>
+  <h2>La idea con agua</h2>
+  <p>Un circuito eléctrico se comporta como una red de tuberías. Si ya trabajas con caudales, presiones y tanques, ya tienes la intuición que necesitas.</p>
+  <div class="grid2">
+    <div class="gcard"><div class="pair">Voltaje (V) ↔ presión</div><p>La fuente es una bomba que crea diferencia de presión. El voltaje es esa diferencia entre dos puntos, como la diferencia de altura entre dos tanques.</p></div>
+    <div class="gcard"><div class="pair">Corriente (A) ↔ caudal</div><p>La corriente es cuánta carga pasa por un punto cada segundo, igual que el caudal en L/s que pasa por una sección de tubería.</p></div>
+    <div class="gcard"><div class="pair">Resistencia (Ω) ↔ tubería estrecha</div><p>Un tramo angosto o un filtro de arena frena el caudal y produce una caída de presión. Más resistencia = menos caudal con la misma bomba.</p></div>
+    <div class="gcard"><div class="pair">Condensador (F) ↔ tanque con membrana</div><p>Un tanque dividido por una membrana elástica: el agua entra por un lado y empuja la membrana hasta que la presión se iguala. Entonces el caudal se detiene.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg>
+      <p><b>Serie = tuberías una detrás de otra.</b> Todo el caudal atraviesa cada tramo (la corriente es la misma) y la presión se va perdiendo tramo por tramo (el voltaje se reparte).</p></div>
+    <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg>
+      <p><b>Paralelo = tuberías en ramas entre los mismos dos colectores.</b> Todas las ramas tienen la misma presión (mismo voltaje) y el caudal total se divide entre ellas (la corriente se reparte).</p></div>
+  </div>
+  <div class="grid2">
+    <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="11" fill="none" stroke="var(--water)" stroke-width="3"/><path d="M15 15 L21 9" stroke="var(--water)" stroke-width="3" stroke-linecap="round"/></svg>
+      <p><b>Medir voltaje es como poner un manómetro diferencial:</b> conectas sus dos tomas a dos puntos de la tubería sin cortar nada. El agua sigue por la tubería.</p></div>
+    <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><rect x="4" y="11" width="22" height="8" rx="2" fill="var(--water)"/><circle cx="15" cy="15" r="6" fill="var(--paper)" stroke="var(--water)" stroke-width="3"/></svg>
+      <p><b>Medir corriente es como instalar un caudalímetro:</b> tienes que cortar la tubería e intercalar el medidor para que todo el caudal pase por dentro.</p></div>
+  </div>
+</section>
+
+<!-- ============ TEORÍA ============ -->
+<section id="teoria" data-toc="Teoría">
+  <div class="eyebrow">Fundamentos</div>
+  <h2>Teoría base</h2>
+  <div class="grid2">
+    <div class="gcard"><div class="sym">V</div><h3>Voltaje (voltios, V)</h3>
+      <p>Diferencia de “empuje” eléctrico entre <b>dos puntos</b>. Siempre se mide entre dos puntos: las dos patas de un componente o los dos extremos del circuito.</p></div>
+    <div class="gcard"><div class="sym">I</div><h3>Corriente (amperios, A)</h3>
+      <p>Carga que pasa por <b>un punto</b> cada segundo. Para medirla la corriente tiene que <b>atravesar</b> el multímetro. 1 mA = 0,001 A.</p></div>
+    <div class="gcard"><div class="sym">R</div><h3>Resistencia (ohmios, Ω)</h3>
+      <p>Oposición al paso de la corriente. <b>Ley de Ohm</b>: <span class="v">V = I · R</span>. La energía se convierte en calor: <span class="v">P = V · I</span>. 1 kΩ = 1000 Ω.</p></div>
+    <div class="gcard"><div class="sym">C</div><h3>Capacitancia (faradios, F)</h3>
+      <p>Capacidad de guardar carga: <span class="v">Q = C · V</span>. Con corriente continua el condensador <b>se carga y después bloquea</b> la corriente. 1 µF = 0,000001 F.</p></div>
+  </div>
+
+  <h3>Las dos leyes de Kirchhoff</h3>
+  <div class="grid2">
+    <div class="callout"><div class="t">Ley de voltajes</div>
+      <p>Al recorrer un camino cerrado, los voltajes de los componentes suman el voltaje de la fuente. Por eso <b>en serie el voltaje se reparte</b>.</p>
+      <div class="eq">V<sub>fuente</sub> = V<sub>1</sub> + V<sub>2</sub> + V<sub>3</sub></div></div>
+    <div class="callout"><div class="t">Ley de corrientes</div>
+      <p>La corriente que llega a un punto de unión es igual a la que sale, como el caudal en una bifurcación. Por eso <b>en paralelo la corriente se reparte</b>.</p>
+      <div class="eq">I<sub>total</sub> = I<sub>1</sub> + I<sub>2</sub> + I<sub>3</sub></div></div>
+  </div>
+
+  <h3>Carga de un condensador a través de una resistencia</h3>
+  <p>Un condensador descargado conectado a la fuente a través de una resistencia R se llena como el tanque con membrana: al principio entra mucho caudal y luego cada vez menos. La rapidez la marca la <b>constante de tiempo τ (tau)</b>:</p>
+  <div class="eq"><span class="big">τ = R · C</span><br>Corriente: arranca en I₀ = V/R y cae a cero → I(t) = I₀ · e<sup>−t/τ</sup><br>Voltaje del condensador: arranca en 0 y sube hasta V → V<sub>C</sub>(t) = V · (1 − e<sup>−t/τ</sup>)<br>En t = τ la corriente bajó al 37 % de I₀ · En t = 5τ el condensador está lleno (99 %)</div>
+</section>
+
+<!-- ============ MULTÍMETRO ============ -->
+<section id="multimetro" data-toc="El multímetro">
+  <div class="eyebrow">Instrumento</div>
+  <h2>Conoce tu multímetro</h2>
+  <p>En toda la guía se usa <b>un solo multímetro digital</b> de bolsillo, del tipo que tiene tres bornes: <b>10A</b>, <b>COM</b> y <b>VΩmA</b>. Lo único que cambia entre medir voltaje y medir corriente es la posición del selector y la forma de conectarlo.</p>
+  <div class="fig"><svg class="intro" id="dmmIntro" viewBox="0 0 640 250" role="img" aria-label="Multímetro digital con sus partes señaladas: pantalla, selector y bornes"></svg></div>
+  <div class="grid2">
+    <div class="gcard"><h3>Para medir voltaje (en paralelo)</h3>
+      <ol>
+        <li>Selector en <b>V⎓</b> (escala 20 V).</li>
+        <li>Punta negra en <b>COM</b>, roja en <b>VΩmA</b>.</li>
+        <li>El circuito queda <b>completo y encendido</b>; no se desconecta nada.</li>
+        <li>Apoya una punta en cada pata del componente. La roja va del lado más cercano al + de la fuente.</li>
+      </ol></div>
+    <div class="gcard"><h3>Para medir corriente (en serie)</h3>
+      <ol>
+        <li><b>Apaga</b> la fuente.</li>
+        <li>Selector en <b>mA⎓</b> (escala 20 mA o 200 mA). Las puntas siguen en <b>COM</b> y <b>VΩmA</b>.</li>
+        <li><b>Abre</b> el circuito en el punto que quieres medir: quita el puente o un cable.</li>
+        <li>Pon una punta en cada extremo del hueco. Ahora la corriente <b>tiene que pasar por el multímetro</b>. Enciende y lee.</li>
+        <li>Al terminar: apaga, vuelve a cerrar el circuito y regresa el selector a V⎓.</li>
+      </ol></div>
+  </div>
+  <div class="grid2">
+    <div class="callout warn"><div class="t">Nunca</div><p>Tocar dos puntos con voltaje (por ejemplo las patas de una resistencia) con el selector en mA⎓. En modo corriente el multímetro casi no tiene resistencia: provocas un cortocircuito y se quema su fusible interno.</p></div>
+    <div class="callout"><div class="t">Si tu multímetro es distinto</div><p>Algunos modelos tienen un borne <b>mA</b> aparte. En ese caso, para medir corriente se pasa la punta roja a ese borne y al terminar se regresa a VΩ. Si la pantalla muestra “−”, solo están invertidas las puntas.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Qué mides</th><th>Selector</th><th>Bornes</th><th>Cómo se conecta</th></tr></thead>
+    <tbody>
+      <tr><td><b>Voltaje DC</b></td><td class="num">V⎓ 20 V</td><td class="num">COM + VΩmA</td><td>En paralelo, con el circuito encendido.</td></tr>
+      <tr><td><b>Corriente DC</b></td><td class="num">mA⎓ 20/200 mA</td><td class="num">COM + VΩmA</td><td>En serie: abrir el circuito e intercalar el multímetro.</td></tr>
+      <tr><td><b>Resistencia</b></td><td class="num">Ω 20 kΩ</td><td class="num">COM + VΩmA</td><td>Sin fuente; el componente suelto o con una pata levantada.</td></tr>
+      <tr><td><b>Capacitancia</b></td><td class="num">–|(– o F</td><td class="num">COM + VΩmA</td><td>Condensador descargado y sin fuente. Roja al +.</td></tr>
+    </tbody></table></div>
+</section>
+
+<!-- ============ PROTOBOARD ============ -->
+<section id="protoboard" data-toc="La protoboard">
+  <div class="eyebrow">Herramienta</div>
+  <h2>Cómo está conectada la protoboard por dentro</h2>
+  <ul>
+    <li><b>Columnas de 5 huecos:</b> en cada mitad, los huecos <span class="hole">a-b-c-d-e</span> de una misma columna están unidos por una lámina metálica. Lo mismo <span class="hole">f-g-h-i-j</span>.</li>
+    <li><b>Canal central:</b> separa la mitad de arriba de la de abajo. La columna 5 de arriba <b>no</b> está unida a la columna 5 de abajo.</li>
+    <li><b>Rieles:</b> las filas largas de los bordes (línea roja = +, línea azul = −) están unidas a lo largo. Ahí se conecta la fuente.</li>
+    <li>Las dos patas de un componente <b>nunca</b> van en la misma columna de 5 huecos: el componente quedaría en cortocircuito.</li>
+  </ul>
+  <div class="callout"><div class="t">Cómo leer los dibujos</div>
+    <p>Los huecos se nombran por <b>columna y fila</b>, por ejemplo <span class="hole">col 6 · b</span>. La fuente entra por la derecha (columna 24). Un <b>cable puente verde</b> une la columna 24 con la 20: ese es el punto donde se abre el circuito para medir la corriente total.</p>
+    <p>Cada montaje tiene dos dibujos con el mismo multímetro: <b>A · voltaje</b> y <b>B · corriente</b>. Los <b>puntos amarillos en movimiento</b> muestran el recorrido de la corriente, de + a −. Fíjate en que en el dibujo B la corriente pasa <b>por dentro</b> del multímetro y en el A no.</p></div>
+  <div class="legend">
+    <span><i style="background:#ffe14d;outline:2px solid #6d4800"></i>corriente</span>
+    <span><i style="background:#d7261e"></i>cable +</span>
+    <span><i style="background:#1f4fd1"></i>cable −</span>
+    <span><i style="background:#25a244"></i>puente</span>
+  </div>
+</section>
+
+<!-- ============ VALORES ============ -->
+<section id="valores" data-toc="Tus valores">
+  <div class="eyebrow">Calculadora</div>
+  <h2>Tus valores</h2>
+  <p>La guía está calculada con estos valores. Si tus componentes son otros, cámbialos: fórmulas, dibujos, pantallas del multímetro y tablas se recalculan.</p>
+  <div class="calc">
+    <div class="fields">
+      <label for="inV">Fuente V (voltios)<input id="inV" type="number" step="0.1" value="9"></label>
+      <label for="inR1">R1 (Ω)<input id="inR1" type="number" value="1000"></label>
+      <label for="inR2">R2 (Ω)<input id="inR2" type="number" value="2200"></label>
+      <label for="inR3">R3 (Ω)<input id="inR3" type="number" value="3300"></label>
+      <label for="inC1">C1 (µF)<input id="inC1" type="number" value="100"></label>
+      <label for="inC2">C2 (µF)<input id="inC2" type="number" value="220"></label>
+      <label for="inC3">C3 (µF)<input id="inC3" type="number" value="470"></label>
+      <label for="inRcs">Rc serie (Ω)<input id="inRcs" type="number" value="100000"></label>
+      <label for="inRcp">Rc paralelo (Ω)<input id="inRcp" type="number" value="10000"></label>
+    </div>
+    <div class="callout warn alert" id="alertP"><div class="t">Cuidado con la potencia</div><p id="alertPtxt"></p></div>
+    <div class="callout warn alert" id="alertV"><div class="t">Cuidado con el voltaje</div><p id="alertVtxt"></p></div>
+  </div>
+</section>
+
+<!-- ============ MONTAJE 1 ============ -->
+<section id="m1" data-toc="1 · R serie" class="mont">
+  <div class="eyebrow">Montaje 1</div>
+  <h2>Tres resistencias en serie</h2>
+  <div class="idea"><div class="t">Idea principal</div><p>Misma corriente en las tres; el voltaje de la fuente se reparte entre ellas.</p></div>
+  <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg><p>Tres filtros de arena en una misma tubería: todo el caudal pasa por los tres y la presión cae un poco en cada uno. El filtro más compacto (la resistencia más grande) produce la mayor caída.</p></div>
+  <h3>Qué dice la teoría</h3>
+  <ul>
+    <li><b>La corriente es igual en todas.</b> Hay un solo camino.</li>
+    <li><b>Las resistencias se suman.</b> R<sub>eq</sub> siempre es mayor que la más grande.</li>
+    <li><b>El voltaje se reparte en proporción a cada R</b>. Los tres voltajes suman el de la fuente.</li>
+  </ul>
+  <div class="eq">
+    <span class="big">R<sub>eq</sub> = R<sub>1</sub> + R<sub>2</sub> + R<sub>3</sub></span> = <span data-k="R.0" data-u="Ω"></span> + <span data-k="R.1" data-u="Ω"></span> + <span data-k="R.2" data-u="Ω"></span> = <b data-k="sR.Req" data-u="Ω"></b><br>
+    I = V / R<sub>eq</sub> = <span data-k="V" data-u="V"></span> / <span data-k="sR.Req" data-u="Ω"></span> = <b data-k="sR.I" data-u="A"></b><br>
+    V<sub>1</sub> = I·R<sub>1</sub> = <b data-k="sR.V1" data-u="V"></b> &nbsp; V<sub>2</sub> = I·R<sub>2</sub> = <b data-k="sR.V2" data-u="V"></b> &nbsp; V<sub>3</sub> = I·R<sub>3</sub> = <b data-k="sR.V3" data-u="V"></b><br>
+    Comprobación: V<sub>1</sub> + V<sub>2</sub> + V<sub>3</sub> = <b data-k="sR.Vs" data-u="V"></b> = V de la fuente
+  </div>
+  <h3>Esquema</h3>
+  <div class="fig"><svg class="sch" id="sSR" viewBox="0 0 500 220" role="img" aria-label="Esquema de tres resistencias en serie"></svg></div>
+  <h3>Montaje y medición</h3>
+  <div class="fig"><div class="figt"><span class="tag">A</span>Medir voltaje · multímetro en paralelo</div><svg class="bb" id="bSR" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres resistencias en serie y el multímetro midiendo el voltaje de R2"></svg>
+    <div class="cap">Selector en V⎓. El puente verde está puesto y el circuito completo. Las puntas tocan las dos patas de R2: la corriente sigue su camino por las resistencias y <b>no entra al multímetro</b>. La pantalla muestra V<sub>2</sub>.</div></div>
+  <div class="fig"><div class="figt cur"><span class="tag">B</span>Medir corriente · multímetro en serie</div><svg class="bb" id="bSRi" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres resistencias en serie y el multímetro intercalado para medir la corriente"></svg>
+    <div class="cap">Fuente apagada, selector en mA⎓, puente verde quitado: el circuito queda abierto entre la columna 24 y la 20. Las puntas cierran ese hueco y <b>toda la corriente atraviesa el multímetro</b>: entra por la roja y sale por la negra. Enciende y lee.</div></div>
+  <h3>Paso a paso para armarlo</h3>
+  <ol>
+    <li>Con la fuente <b>apagada</b>, ajústala a <span class="v" data-k="V" data-u="V"></span> y el límite de corriente a 0,10 A.</li>
+    <li><b>R1</b> entre <span class="hole">col 2 · d</span> y <span class="hole">col 6 · d</span>.</li>
+    <li><b>R2</b> entre <span class="hole">col 6 · b</span> y <span class="hole">col 10 · b</span>. Comparte la columna 6 con R1: ahí quedan unidas.</li>
+    <li><b>R3</b> vertical de <span class="hole">col 10 · d</span> a <span class="hole">col 10 · h</span>, cruzando el canal central.</li>
+    <li>Cable rojo del riel + a <span class="hole">col 2 · a</span>. Cable azul de <span class="hole">col 10 · j</span> al riel −.</li>
+    <li>Cable rojo de <span class="hole">col 20 · a</span> al riel +, y el puente verde de <span class="hole">col 24 · c</span> a <span class="hole">col 20 · c</span>.</li>
+    <li>Fuente: + a <span class="hole">col 24 · e</span>, − al riel − de abajo. Enciende.</li>
+  </ol>
+  <h3>Qué medir</h3>
+  <ul>
+    <li><b>Voltaje total:</b> roja en col 2, negra en el riel −. Debe dar el voltaje de la fuente.</li>
+    <li><b>V<sub>1</sub>:</b> roja en col 2, negra en col 6. <b>V<sub>2</sub>:</b> roja en col 6, negra en col 10 (dibujo A). <b>V<sub>3</sub>:</b> roja en col 10 (arriba), negra en el riel −.</li>
+    <li><b>Corriente total:</b> como en el dibujo B.</li>
+    <li><b>Corriente entre R1 y R2:</b> apaga, saca la pata izquierda de R2 de la col 6 y ponla en la col 7 (vacía). Roja en col 6, negra en col 7. Repite entre R2 y R3 moviendo la pata de arriba de R3 a <span class="hole">col 11 · d</span>. Las tres corrientes deben ser iguales.</li>
+    <li><b>R<sub>eq</sub>:</b> desconecta la fuente y quita el puente. Selector en Ω, puntas en col 2 y riel −.</li>
+  </ul>
+  <h3>Hoja de datos</h3>
+  <div class="tbl" id="tSR"></div>
+</section>
+
+<!-- ============ MONTAJE 2 ============ -->
+<section id="m2" data-toc="2 · R paralelo" class="mont">
+  <div class="eyebrow">Montaje 2</div>
+  <h2>Tres resistencias en paralelo</h2>
+  <div class="idea"><div class="t">Idea principal</div><p>Mismo voltaje en las tres; la corriente total se reparte entre las ramas.</p></div>
+  <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg><p>Tres tuberías de distinto diámetro entre los mismos dos colectores: todas soportan la misma presión, y por la más ancha (la resistencia más pequeña) pasa más caudal. Cada rama nueva es un camino más, así que el sistema completo deja pasar más agua.</p></div>
+  <h3>Qué dice la teoría</h3>
+  <ul>
+    <li><b>El voltaje es igual en todas</b>: las tres están entre el riel + y el riel −.</li>
+    <li><b>Cada rama toma su corriente</b> con I = V/R. La resistencia más pequeña deja pasar más.</li>
+    <li><b>Las corrientes se suman.</b> R<sub>eq</sub> siempre es menor que la más pequeña.</li>
+  </ul>
+  <div class="eq">
+    <span class="big">1/R<sub>eq</sub> = 1/R<sub>1</sub> + 1/R<sub>2</sub> + 1/R<sub>3</sub></span> → R<sub>eq</sub> = <b data-k="pR.Req" data-u="Ω"></b><br>
+    I<sub>1</sub> = V/R<sub>1</sub> = <b data-k="pR.I1" data-u="A"></b> &nbsp; I<sub>2</sub> = V/R<sub>2</sub> = <b data-k="pR.I2" data-u="A"></b> &nbsp; I<sub>3</sub> = V/R<sub>3</sub> = <b data-k="pR.I3" data-u="A"></b><br>
+    I<sub>total</sub> = I<sub>1</sub> + I<sub>2</sub> + I<sub>3</sub> = <b data-k="pR.IT" data-u="A"></b> &nbsp;(también = V/R<sub>eq</sub>)
+  </div>
+  <h3>Esquema</h3>
+  <div class="fig"><svg class="sch" id="sPR" viewBox="0 0 500 230" role="img" aria-label="Esquema de tres resistencias en paralelo"></svg></div>
+  <h3>Montaje y medición</h3>
+  <div class="fig"><div class="figt"><span class="tag">A</span>Medir voltaje · multímetro en paralelo</div><svg class="bb" id="bPR" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres resistencias en paralelo y el multímetro midiendo el voltaje de R2"></svg>
+    <div class="cap">Cada resistencia cruza el canal central: arriba va al riel +, abajo al riel −. Selector en V⎓, roja arriba de R2 y negra abajo. Mira los puntos: la rama de R1 lleva la corriente más rápida (la más grande).</div></div>
+  <div class="fig"><div class="figt cur"><span class="tag">B</span>Medir la corriente de una rama · multímetro en serie</div><svg class="bb" id="bPRi" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres resistencias en paralelo y el multímetro intercalado en la rama de R2"></svg>
+    <div class="cap">Fuente apagada, selector en mA⎓. Se quita el cable rojo de la rama de R2 y el multímetro ocupa su lugar: roja en el riel +, negra en <span class="hole">col 9 · a</span>. La corriente de R2 ahora tiene que pasar por el multímetro. Para la corriente total se hace como en el montaje 1 (quitando el puente verde).</div></div>
+  <h3>Paso a paso para armarlo</h3>
+  <ol>
+    <li><b>R1</b> vertical en la columna 4, de <span class="hole">col 4 · c</span> a <span class="hole">col 4 · h</span>. <b>R2</b> igual en la columna 9 y <b>R3</b> en la 14.</li>
+    <li>Cables rojos de <span class="hole">col 4 · a</span>, <span class="hole">col 9 · a</span> y <span class="hole">col 14 · a</span> al riel +.</li>
+    <li>Cables azules de <span class="hole">col 4 · j</span>, <span class="hole">col 9 · j</span> y <span class="hole">col 14 · j</span> al riel −.</li>
+    <li>Entrada igual que en el montaje 1: cable de col 20 · a al riel +, puente verde 24–20, fuente + a col 24 · e y − al riel −.</li>
+  </ol>
+  <h3>Qué medir</h3>
+  <ul>
+    <li><b>Voltaje de cada resistencia:</b> roja en la mitad de arriba de su columna, negra en la mitad de abajo. Las tres deben dar el voltaje de la fuente.</li>
+    <li><b>Corriente de cada rama:</b> como en el dibujo B, cambiando de rama.</li>
+    <li><b>Corriente total:</b> quita el puente verde y pon las puntas en col 24 (roja) y col 20 (negra).</li>
+    <li><b>R<sub>eq</sub>:</b> sin fuente y sin puente, selector en Ω entre el riel + y el riel −.</li>
+  </ul>
+  <h3>Hoja de datos</h3>
+  <div class="tbl" id="tPR"></div>
+</section>
+
+<!-- ============ MONTAJE 3 ============ -->
+<section id="m3" data-toc="3 · C serie" class="mont">
+  <div class="eyebrow">Montaje 3</div>
+  <h2>Tres condensadores en serie</h2>
+  <div class="idea"><div class="t">Idea principal</div><p>Misma carga en los tres; el voltaje se reparte al revés que en las resistencias: el condensador más pequeño se queda con más voltaje.</p></div>
+  <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg><p>Tres tanques con membrana uno detrás de otro: el volumen que desplaza la primera membrana es el que empuja a la segunda y a la tercera (misma carga). La membrana más rígida (el condensador más pequeño) acumula la mayor presión.</p></div>
+  <h3>Qué dice la teoría</h3>
+  <ul>
+    <li><b>La carga Q es igual en los tres.</b> Entre ellos no hay otro camino.</li>
+    <li><b>El voltaje se reparte en proporción inversa a C</b>, porque V = Q/C.</li>
+    <li><b>La capacitancia total disminuye</b>: C<sub>eq</sub> es menor que el más pequeño. La fórmula tiene la forma de las resistencias en paralelo.</li>
+    <li><b>La corriente solo circula mientras se cargan</b>; después es cero.</li>
+  </ul>
+  <div class="eq">
+    <span class="big">1/C<sub>eq</sub> = 1/C<sub>1</sub> + 1/C<sub>2</sub> + 1/C<sub>3</sub></span> → C<sub>eq</sub> = <b data-k="sC.Ceq" data-u="F"></b><br>
+    Q = C<sub>eq</sub> · V = <b data-k="sC.Q" data-u="C"></b> (la misma en cada condensador)<br>
+    V<sub>1</sub> = Q/C<sub>1</sub> = <b data-k="sC.V1" data-u="V"></b> &nbsp; V<sub>2</sub> = Q/C<sub>2</sub> = <b data-k="sC.V2" data-u="V"></b> &nbsp; V<sub>3</sub> = Q/C<sub>3</sub> = <b data-k="sC.V3" data-u="V"></b><br>
+    Con R<sub>c</sub> = <span data-k="Rcs" data-u="Ω"></span>: τ = <b data-k="sC.tau" data-u="s"></b> · I₀ = <b data-k="sC.I0" data-u="A"></b> · carga completa en 5τ ≈ <b data-k="sC.t5" data-u="s"></b>
+  </div>
+  <h3>Esquema</h3>
+  <div class="fig"><svg class="sch" id="sSC" viewBox="0 0 500 220" role="img" aria-label="Esquema de tres condensadores en serie con resistencia de carga"></svg></div>
+  <div class="callout warn"><div class="t">Polaridad y descarga</div>
+    <p>Los electrolíticos tienen polaridad: la pata larga (+) va hacia el + de la fuente y la franja gris con signos “−” hacia el −. Al revés se calientan y pueden reventar. Antes y después de medir, descárgalos tocando sus dos patas con la resistencia de 1 kΩ unos 5 segundos.</p></div>
+  <h3>Montaje y medición</h3>
+  <div class="simbar"><button class="simbtn" id="sim-sC" type="button">▶ Simular la carga</button><small>En tiempo real, como lo verás en el laboratorio. Mira las dos pantallas.</small></div>
+  <div class="fig"><div class="figt"><span class="tag">A</span>Medir voltaje · multímetro en paralelo</div><svg class="bb" id="bSC" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres condensadores en serie y el multímetro midiendo el voltaje de C2"></svg>
+    <div class="cap">Rc va entre la columna 20 y la 16 y hace la carga lenta. Con el puente puesto y los condensadores ya cargados, selector en V⎓ y puntas sobre C2. Ya no hay puntos amarillos: cargado, el condensador bloquea la corriente.</div></div>
+  <div class="fig"><div class="figt cur"><span class="tag">B</span>Medir corriente de carga · multímetro en serie</div><svg class="bb" id="bSCi" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres condensadores en serie y el multímetro intercalado para medir la corriente de carga"></svg>
+    <div class="cap">Condensadores descargados y fuente apagada. Selector en mA⎓, puente quitado, puntas entre col 24 (roja) y col 20 (negra). Al encender, la pantalla arranca en I₀ y baja hasta casi cero. Cronometra el tiempo hasta que llegue al 37 % de I₀: eso es τ.</div></div>
+  <h3>Paso a paso para armarlo</h3>
+  <ol>
+    <li>Mide C1, C2 y C3 <b>sueltos</b> con el capacímetro y anota.</li>
+    <li><b>C1</b> entre <span class="hole">col 2 · d</span> (+) y <span class="hole">col 6 · d</span> (−).</li>
+    <li><b>C2</b> entre <span class="hole">col 6 · b</span> (+) y <span class="hole">col 10 · b</span> (−).</li>
+    <li><b>C3</b> vertical de <span class="hole">col 10 · d</span> (+) a <span class="hole">col 10 · h</span> (−).</li>
+    <li>Cable rojo del riel + a col 2 · a; cable azul de col 10 · j al riel −.</li>
+    <li><b>Rc</b> (<span data-k="Rcs" data-u="Ω"></span>) entre <span class="hole">col 20 · e</span> y <span class="hole">col 16 · e</span>; cable rojo de col 16 · a al riel +.</li>
+    <li>Fuente apagada: + a col 24 · e, − al riel −.</li>
+  </ol>
+  <h3>Qué medir</h3>
+  <ul>
+    <li><b>C<sub>eq</sub>:</b> antes de conectar la fuente, todo descargado, capacímetro entre col 2 (roja) y riel − (negra).</li>
+    <li><b>Corriente de carga y τ:</b> como en el dibujo B. Arranca cerca de <span class="v" data-k="sC.I0" data-u="A"></span>; anota el tiempo en que llega a <span class="v" data-k="sC.I37" data-u="A"></span>.</li>
+    <li><b>Voltajes:</b> después de unos <span class="v" data-k="sC.t5" data-u="s"></span>, quita el multímetro, pon el puente y mide rápido en V⎓: V<sub>1</sub> (col 2 → col 6), V<sub>2</sub> (col 6 → col 10, dibujo A), V<sub>3</sub> (col 10 arriba → riel −) y el total.</li>
+    <li>Si tu capacímetro no llega a ese rango, calcula con el tiempo: <span class="v">C = τ / Rc</span>.</li>
+  </ul>
+  <div class="callout"><div class="t">Por qué los voltajes medidos se mueven</div><p>Los electrolíticos tienen ±20 % de tolerancia y una pequeña fuga, y el multímetro los descarga lentamente al medir. Mide rápido y acepta diferencias de hasta 20 %.</p></div>
+  <h3>Hoja de datos</h3>
+  <div class="tbl" id="tSC"></div>
+</section>
+
+<!-- ============ MONTAJE 4 ============ -->
+<section id="m4" data-toc="4 · C paralelo" class="mont">
+  <div class="eyebrow">Montaje 4</div>
+  <h2>Tres condensadores en paralelo</h2>
+  <div class="idea"><div class="t">Idea principal</div><p>Mismo voltaje en los tres; las capacitancias se suman y el más grande guarda más carga.</p></div>
+  <div class="water"><svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 3C11 9 7 13 7 18a8 8 0 0 0 16 0c0-5-4-9-8-15z" fill="var(--water)"/></svg><p>Tres tanques conectados al mismo colector: todos llegan a la misma presión, el más grande almacena más volumen y juntos se comportan como un tanque de volumen total. Por eso tardan más en llenarse.</p></div>
+  <h3>Qué dice la teoría</h3>
+  <ul>
+    <li><b>El voltaje es igual en los tres.</b></li>
+    <li><b>Cada uno guarda su propia carga</b>, Q = C·V.</li>
+    <li><b>Las capacitancias se suman.</b> La fórmula tiene la forma de las resistencias en serie.</li>
+    <li>Durante la carga la corriente se reparte entre los tres; al terminar es cero.</li>
+  </ul>
+  <div class="eq">
+    <span class="big">C<sub>eq</sub> = C<sub>1</sub> + C<sub>2</sub> + C<sub>3</sub></span> = <b data-k="pC.Ceq" data-u="F"></b><br>
+    Q<sub>1</sub> = C<sub>1</sub>·V = <b data-k="pC.Q1" data-u="C"></b> &nbsp; Q<sub>2</sub> = <b data-k="pC.Q2" data-u="C"></b> &nbsp; Q<sub>3</sub> = <b data-k="pC.Q3" data-u="C"></b> &nbsp; Q<sub>total</sub> = <b data-k="pC.QT" data-u="C"></b><br>
+    Con R<sub>c</sub> = <span data-k="Rcp" data-u="Ω"></span>: τ = <b data-k="pC.tau" data-u="s"></b> · I₀ = <b data-k="pC.I0" data-u="A"></b> · carga completa en 5τ ≈ <b data-k="pC.t5" data-u="s"></b>
+  </div>
+  <h3>Esquema</h3>
+  <div class="fig"><svg class="sch" id="sPC" viewBox="0 0 500 230" role="img" aria-label="Esquema de tres condensadores en paralelo con resistencia de carga"></svg></div>
+  <h3>Montaje y medición</h3>
+  <div class="simbar"><button class="simbtn" id="sim-pC" type="button">▶ Simular la carga</button><small>En tiempo real. Tarda más que el montaje 3 porque C<sub>eq</sub> es mucho mayor.</small></div>
+  <div class="fig"><div class="figt"><span class="tag">A</span>Medir voltaje · multímetro en paralelo</div><svg class="bb" id="bPC" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres condensadores en paralelo y el multímetro midiendo el voltaje de C2"></svg>
+    <div class="cap">La pata + de cada condensador queda arriba, hacia el riel +. Con el puente puesto y la carga terminada, selector en V⎓, roja arriba y negra abajo del condensador.</div></div>
+  <div class="fig"><div class="figt cur"><span class="tag">B</span>Medir corriente de carga · multímetro en serie</div><svg class="bb" id="bPCi" viewBox="0 0 720 600" role="img" aria-label="Protoboard con tres condensadores en paralelo y el multímetro intercalado para medir la corriente de carga"></svg>
+    <div class="cap">Descargados y con la fuente apagada: selector en mA⎓, sin puente, puntas entre col 24 y col 20. Enciende y cronometra. Los puntos muestran que C3, el más grande, recibe la mayor parte de la corriente.</div></div>
+  <h3>Paso a paso para armarlo</h3>
+  <ol>
+    <li>Descarga los tres condensadores.</li>
+    <li><b>C1</b> vertical en la columna 4: + en <span class="hole">col 4 · c</span>, − en <span class="hole">col 4 · h</span>. <b>C2</b> en la columna 9 y <b>C3</b> en la 14, igual.</li>
+    <li>Cables rojos de col 4 · a, col 9 · a y col 14 · a al riel +. Cables azules de col 4 · j, col 9 · j y col 14 · j al riel −.</li>
+    <li><b>Rc</b> (<span data-k="Rcp" data-u="Ω"></span>) entre col 20 · e y col 16 · e; cable rojo de col 16 · a al riel +.</li>
+  </ol>
+  <h3>Qué medir</h3>
+  <ul>
+    <li><b>C<sub>eq</sub>:</b> sin fuente y descargados, capacímetro entre riel + (roja) y riel − (negra).</li>
+    <li><b>Corriente de carga y τ:</b> como en el dibujo B. Arranca cerca de <span class="v" data-k="pC.I0" data-u="A"></span>; anota cuándo baja a <span class="v" data-k="pC.I37" data-u="A"></span>.</li>
+    <li><b>Voltajes:</b> después de unos <span class="v" data-k="pC.t5" data-u="s"></span>, pon el puente y mide cada condensador como en el dibujo A. Los tres deben marcar lo mismo.</li>
+    <li>La carga no se mide directamente: calcúlala con tu voltaje medido, Q = C·V.</li>
+  </ul>
+  <h3>Hoja de datos</h3>
+  <div class="tbl" id="tPC"></div>
+</section>
+
+<!-- ============ RESUMEN ============ -->
+<section id="resumen" data-toc="Resumen" class="mont">
+  <div class="eyebrow">Para el informe</div>
+  <h2>Resumen comparativo</h2>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>R en serie</th><th>R en paralelo</th><th>C en serie</th><th>C en paralelo</th></tr></thead>
+    <tbody>
+      <tr><td><b>Equivalente</b></td><td class="num">R₁+R₂+R₃</td><td class="num">1/(1/R₁+1/R₂+1/R₃)</td><td class="num">1/(1/C₁+1/C₂+1/C₃)</td><td class="num">C₁+C₂+C₃</td></tr>
+      <tr><td><b>Lo que es igual</b></td><td>Corriente</td><td>Voltaje</td><td>Carga</td><td>Voltaje</td></tr>
+      <tr><td><b>Lo que se reparte</b></td><td>Voltaje (más en la R mayor)</td><td>Corriente (más en la R menor)</td><td>Voltaje (más en el C menor)</td><td>Carga (más en el C mayor)</td></tr>
+      <tr><td><b>El equivalente es</b></td><td>Mayor que la mayor</td><td>Menor que la menor</td><td>Menor que el menor</td><td>Mayor que el mayor</td></tr>
+      <tr><td><b>Analogía con agua</b></td><td>Filtros en una tubería</td><td>Tuberías en ramas</td><td>Tanques con membrana en fila</td><td>Tanques al mismo colector</td></tr>
+      <tr><td><b>Corriente en DC</b></td><td>Constante</td><td>Constante</td><td>Solo al cargar</td><td>Solo al cargar</td></tr>
+    </tbody></table></div>
+  <p>Para memorizar: <b>los condensadores se combinan al revés que las resistencias.</b></p>
+  <div class="eq">Error % = |medido − teórico| / teórico × 100</div>
+  <p>Con resistencias de ±5 % espera errores menores a 5 %; con electrolíticos, hasta 20 %. En la versión web el error se calcula solo al escribir tu medición.</p>
+</section>
+
+<!-- ============ ERRORES ============ -->
+<section id="errores" data-toc="Errores comunes">
+  <div class="eyebrow">Diagnóstico</div>
+  <h2>Errores comunes</h2>
+  <div class="grid2">
+    <div class="gcard"><h3>El multímetro marca 0 en corriente</h3><p>El selector no está en mA⎓, el fusible interno está quemado o el puente sigue puesto y la corriente lo prefiere a él en vez de pasar por el multímetro.</p></div>
+    <div class="gcard"><h3>La resistencia medida es rara</h3><p>Mediste con la fuente conectada o con la resistencia todavía unida a otras: estás midiendo el conjunto.</p></div>
+    <div class="gcard"><h3>Un componente no recibe voltaje</h3><p>Sus dos patas quedaron en la misma columna de 5 huecos, o un cable no cruzó el canal central.</p></div>
+    <div class="gcard"><h3>La fuente entra en límite de corriente</h3><p>Hay un cortocircuito: un cable del riel + tocando el riel −, o el multímetro en mA⎓ conectado en paralelo.</p></div>
+    <div class="gcard"><h3>El condensador se calienta</h3><p>Está con la polaridad invertida o su voltaje nominal es menor que el aplicado. Desconecta de inmediato.</p></div>
+    <div class="gcard"><h3>La lectura sale negativa</h3><p>Las puntas están al revés. El valor es el mismo; solo cambia el sentido.</p></div>
+  </div>
+</section>
+<p class="cap">Las mediciones que escribas en las hojas de datos se guardan solo en este navegador.</p>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const STORE='guia-serie-paralelo-v1';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(e){saved={};}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(saved));}catch(e){}}
+
+/* ---------- formato ---------- */
+function si(v,u,d){d=d||3;if(!isFinite(v))return '—';if(v===0)return '0 '+u;
+  const a=Math.abs(v),PF=[[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n']];
+  let f=1e-9,p='n';for(const [ff,pp] of PF){if(a>=ff*0.9995){f=ff;p=pp;break;}}
+  let s=(v/f).toPrecision(d);if(s.includes('e'))s=String(+s);
+  if(s.includes('.'))s=s.replace(/0+$/,'').replace(/\.$/,'');
+  return s.replace('.',',')+' '+p+u;}
+function fx(v){if(!isFinite(v))return '—';let s=v.toPrecision(3);if(s.includes('e'))s=String(+s);return s.replace('.',',');}
+function f35(x){if(x<2)return x.toFixed(3);if(x<20)return x.toFixed(2);if(x<200)return x.toFixed(1);return x.toFixed(0);}
+function dmmVal(v,kind){if(kind==='V')return [f35(v),'V'];if(v<2e-4)return [f35(v*1e6),'µA'];return [f35(v*1e3),'mA'];}
+
+/* ---------- cálculo ---------- */
+function num(id,def){const el=$('#'+id);const v=parseFloat(String(el.value).replace(',','.'));return v>0?v:def;}
+let N;
+function compute(){
+  const V=num('inV',9),R=[num('inR1',1000),num('inR2',2200),num('inR3',3300)],
+        C=[num('inC1',100),num('inC2',220),num('inC3',470)].map(c=>c*1e-6),
+        Rcs=num('inRcs',100000),Rcp=num('inRcp',10000);
+  const sRq=R[0]+R[1]+R[2],sI=V/sRq;
+  const sR={Req:sRq,I:sI,V1:sI*R[0],V2:sI*R[1],V3:sI*R[2],Vs:sI*sRq,P1:sI*sI*R[0],P2:sI*sI*R[1],P3:sI*sI*R[2]};
+  const pI=R.map(r=>V/r),pIT=pI[0]+pI[1]+pI[2];
+  const pR={Req:1/(1/R[0]+1/R[1]+1/R[2]),I1:pI[0],I2:pI[1],I3:pI[2],IT:pIT,P1:V*pI[0],P2:V*pI[1],P3:V*pI[2]};
+  const sCe=1/(1/C[0]+1/C[1]+1/C[2]),sQ=sCe*V;
+  const sC={Ceq:sCe,Q:sQ,V1:sQ/C[0],V2:sQ/C[1],V3:sQ/C[2],tau:Rcs*sCe,t5:5*Rcs*sCe,I0:V/Rcs,I37:0.368*V/Rcs};
+  const pCe=C[0]+C[1]+C[2];
+  const pC={Ceq:pCe,Q1:C[0]*V,Q2:C[1]*V,Q3:C[2]*V,QT:pCe*V,tau:Rcp*pCe,t5:5*Rcp*pCe,I0:V/Rcp,I37:0.368*V/Rcp};
+  return {V,R,C,Rcs,Rcp,sR,pR,sC,pC};
+}
+function get(o,k){return k.split('.').reduce((a,p)=>a==null?a:a[p],o);}
+
+/* ---------- colores de bandas ---------- */
+const BC=['#1b1b1b','#7a4a1e','#c62828','#ef6c00','#f2c200','#2e7d32','#1565c0','#6a1b9a','#9e9e9e','#f5f5f5'];
+const BN=['negro','marrón','rojo','naranja','amarillo','verde','azul','violeta','gris','blanco'];
+function bands(R){let e=Math.floor(Math.log10(R))-1;let d=Math.round(R/Math.pow(10,e));if(d>=100){d=Math.round(d/10);e++;}return [Math.floor(d/10),d%10,e];}
+function multC(e){return e>=0&&e<=9?BC[e]:(e===-1?'#c9a227':'#b0b0b0');}
+function multN(e){return e>=0&&e<=9?BN[e]:(e===-1?'dorado':'plateado');}
+
+/* ---------- pantalla de 7 segmentos ---------- */
+const SEG={0:'abcdef',1:'bc',2:'abged',3:'abgcd',4:'fgbc',5:'afgcd',6:'afgedc',7:'abc',8:'abcdefg',9:'abcdfg','-':'g',' ':''};
+function seg7(str,xr,y,h,on,off){
+  const w=h*0.5,t=h*0.13,gap=h*0.22,chars=[];
+  for(const ch of str){if(ch==='.'&&chars.length)chars[chars.length-1].dot=true;else chars.push({ch,dot:false});}
+  const tot=chars.length*w+(chars.length-1)*gap;let x=xr-tot,s='';
+  const Rr=(X,Y,W,Hh,o)=>`<rect x="${X.toFixed(1)}" y="${Y.toFixed(1)}" width="${W.toFixed(1)}" height="${Hh.toFixed(1)}" rx="${(t/2).toFixed(1)}" fill="${o?on:off}"/>`;
+  const hv=h/2-t*0.9;
+  for(const c of chars){const g=SEG[c.ch]||'';
+    s+=Rr(x+t*.6,y,w-1.2*t,t,g.includes('a'))+Rr(x+w-t,y+t*.6,t,hv,g.includes('b'))+Rr(x+w-t,y+h/2+t*.3,t,hv,g.includes('c'))+Rr(x+t*.6,y+h-t,w-1.2*t,t,g.includes('d'))+Rr(x,y+h/2+t*.3,t,hv,g.includes('e'))+Rr(x,y+t*.6,t,hv,g.includes('f'))+Rr(x+t*.6,y+h/2-t/2,w-1.2*t,t,g.includes('g'));
+    s+=Rr(x+w+gap*0.22,y+h-t,t,t,c.dot);x+=w+gap;}
+  const dx=((y+h/2)*Math.tan(7*Math.PI/180)).toFixed(1);
+  return `<g transform="skewX(-7) translate(${dx} 0)">${s}</g>`;
+}
+function lcdInner(val){return seg7(val[0],98,10,25,'#1c2414','rgba(28,36,20,0.07)')+`<text x="98" y="44" text-anchor="end" font-family="Arial,sans-serif" font-size="8.5" font-weight="700" fill="#1c2414">${val[1]}</text><text x="4" y="9" font-family="Arial,sans-serif" font-size="6.5" font-weight="700" fill="#1c2414">DC</text>`;}
+
+/* ---------- protoboard estilo Fritzing ---------- */
+const BY=230,ROW={'T-':20,'T+':40,a:80,b:100,c:120,d:140,e:160,f:200,g:220,h:240,i:260,j:280,'B-':320,'B+':340};
+function H(c,r){return [40+(c-1)*20,BY+ROW[r]];}
+const P=p=>`${(+p[0]).toFixed(1)} ${(+p[1]).toFixed(1)}`;
+function boardBase(){
+  let s=`<rect x="14" y="${BY}" width="512" height="360" rx="8" fill="url(#gBoard)" stroke="#c9c9c1" stroke-width="1.5"/>`;
+  s+=`<rect x="14" y="${BY+173}" width="512" height="14" fill="#dcdcd5"/><line x1="14" x2="526" y1="${BY+173.5}" y2="${BY+173.5}" stroke="#c4c4bc"/><line x1="14" x2="526" y1="${BY+186.5}" y2="${BY+186.5}" stroke="#fbfbf8"/>`;
+  s+=`<line x1="32" x2="508" y1="${BY+9}" y2="${BY+9}" stroke="#2f62d6" stroke-width="1.6"/><line x1="32" x2="508" y1="${BY+51}" y2="${BY+51}" stroke="#d8372b" stroke-width="1.6"/>`;
+  s+=`<line x1="32" x2="508" y1="${BY+309}" y2="${BY+309}" stroke="#2f62d6" stroke-width="1.6"/><line x1="32" x2="508" y1="${BY+351}" y2="${BY+351}" stroke="#d8372b" stroke-width="1.6"/>`;
+  for(const r in ROW){for(let c=1;c<=24;c++){const [x,y]=H(c,r);s+=`<rect x="${x-3.2}" y="${y-3.2}" width="6.4" height="6.4" rx="1" fill="#3a3a3a"/><rect x="${x-3.2}" y="${y+2}" width="6.4" height="1.2" fill="#ffffff" opacity=".5"/>`;}}
+  for(let c=1;c<=24;c++){const x=40+(c-1)*20;s+=`<text x="${x}" y="${BY+67}" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#8b8b84">${c}</text><text x="${x}" y="${BY+299}" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" fill="#8b8b84">${c}</text>`;}
+  for(const r of 'abcdefghij'){const y=BY+ROW[r]+4;s+=`<text x="25" y="${y}" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#8b8b84">${r}</text><text x="515" y="${y}" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" fill="#8b8b84">${r}</text>`;}
+  const rl=(y,t,c)=>`<text x="25" y="${y}" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="${c}">${t}</text><text x="515" y="${y}" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="${c}">${t}</text>`;
+  s+=rl(BY+25,'−','#2f62d6')+rl(BY+45,'+','#d8372b')+rl(BY+325,'−','#2f62d6')+rl(BY+345,'+','#d8372b');
+  return s;
+}
+const WC={r:'#d7261e',n:'#1f4fd1',g:'#25a244'};
+function wire(a,b,k){const c=WC[k],l=(st,w,o)=>`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="${st}" stroke-width="${w}" stroke-linecap="round"${o?` opacity="${o}"`:''}/>`;
+  return l('#000',7.6,.28)+l(c,5.2)+`<line x1="${a[0]-1}" y1="${a[1]-1}" x2="${b[0]-1}" y2="${b[1]-1}" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".35"/>`+
+  `<circle cx="${a[0]}" cy="${a[1]}" r="2.3" fill="#d0d4d6" stroke="#6f7579" stroke-width=".8"/><circle cx="${b[0]}" cy="${b[1]}" r="2.3" fill="#d0d4d6" stroke="#6f7579" stroke-width=".8"/>`;}
+function label(x,y,txt,anchor){const lines=txt.split('\n');return `<text x="${x}" y="${y}" text-anchor="${anchor||'middle'}" class="plab">`+lines.map((l,i)=>`<tspan x="${x}" dy="${i?14:0}">${l}</tspan>`).join('')+`</text>`;}
+function legs(a,b){return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#7d868c" stroke-width="3.2" stroke-linecap="round"/><line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#c9cfd3" stroke-width="1.6" stroke-linecap="round"/>`;}
+function res(a,b,R,txt,lx,ly,anc){
+  const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,ang=Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI,bd=bands(R);
+  return legs(a,b)+`<g transform="translate(${mx} ${my}) rotate(${ang})">`+
+  `<path d="M-23 -5.5Q-23 -9.5 -18 -9.5L-13 -7.2L13 -7.2L18 -9.5Q23 -9.5 23 -5.5L23 5.5Q23 9.5 18 9.5L13 7.2L-13 7.2L-18 9.5Q-23 9.5 -23 5.5Z" fill="url(#gRes)" stroke="#8a6c38" stroke-width=".8"/>`+
+  `<rect x="-15.5" y="-8.6" width="3.8" height="17.2" fill="${BC[bd[0]]}"/><rect x="-8.5" y="-7.2" width="3.8" height="14.4" fill="${BC[bd[1]]}"/><rect x="-1.5" y="-7.2" width="3.8" height="14.4" fill="${multC(bd[2])}"/><rect x="12.4" y="-8.6" width="3" height="17.2" fill="#c9a227"/>`+
+  `<rect x="-20" y="-6.5" width="40" height="2.4" rx="1.2" fill="#fff" opacity=".35"/></g>`+
+  label(mx+lx,my+ly,txt,anc);
+}
+function cap(a,b,txt,lx,ly,anc){
+  const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2,ang=Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI;
+  return legs(a,b)+`<g transform="translate(${mx} ${my}) rotate(${ang})">`+
+  `<rect x="-21" y="-12" width="42" height="24" rx="4" fill="url(#gCap)" stroke="#0f2448" stroke-width=".8"/>`+
+  `<rect x="8" y="-12" width="10" height="24" fill="url(#gCapS)"/>`+
+  `<text x="13" y="-2" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#2b3a4a">−</text><text x="13" y="8" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#2b3a4a">−</text>`+
+  `<rect x="-21" y="-12" width="3" height="24" rx="1.5" fill="#0d1d3b" opacity=".6"/><rect x="-17" y="-9.5" width="24" height="2.6" rx="1.3" fill="#fff" opacity=".28"/></g>`+
+  label(mx+lx,my+ly,txt,anc);
+}
+/* punta de prueba: punta metálica en el hueco, mango inclinado hacia el multímetro */
+function probe(tip,col,jack,th){
+  if(th==null)th=Math.max(-28,Math.min(28,(jack[0]-tip[0])*0.2));
+  const r=th*Math.PI/180,s=Math.sin(r),c=Math.cos(r);
+  const end=[tip[0]+76*s,tip[1]-76*c],c1=[jack[0],jack[1]+48],c2=[end[0]+48*s,end[1]-48*c];
+  const g=col==='r'?'gProbeR':'gProbeK',cc=col==='r'?'#c42a1f':'#1b1b1b';
+  const cable=`<path d="M${P(jack)} C${P(c1)} ${P(c2)} ${P(end)}" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="5.6" stroke-linecap="round"/><path d="M${P(jack)} C${P(c1)} ${P(c2)} ${P(end)}" fill="none" stroke="${cc}" stroke-width="3.8" stroke-linecap="round"/>`;
+  let grip='';for(let y=-62;y<=-36;y+=5)grip+=`<line x1="-5" x2="5" y1="${y}" y2="${y}" stroke="#000" stroke-opacity=".25"/>`;
+  const body=`<g transform="translate(${P(tip)}) rotate(${th.toFixed(1)})">`+
+    `<path d="M0 0L-1.5 -5L-1.5 -17L1.5 -17L1.5 -5Z" fill="url(#gMetal)" stroke="#5f686e" stroke-width=".5"/>`+
+    `<rect x="-8.5" y="-23" width="17" height="6" rx="2.6" fill="url(#${g})"/>`+
+    `<rect x="-5.8" y="-70" width="11.6" height="48" rx="5.5" fill="url(#${g})"/>${grip}`+
+    `<rect x="-3.6" y="-77" width="7.2" height="9" rx="2" fill="${cc}"/></g>`;
+  return {cable,body,tip,end,c1,c2,jack};
+}
+/* tramo de la corriente que atraviesa el multímetro: sube por la punta roja, cruza el aparato y baja por la negra */
+function viaMeter(rp,bp){return ` L${P(rp.end)} C${P(rp.c2)} ${P(rp.c1)} ${P(rp.jack)} L${P(bp.jack)} C${P(bp.c1)} ${P(bp.c2)} ${P(bp.end)} L${P(bp.tip)}`;}
+
+/* ---------- multímetro digital (tipo UNI-T de bolsillo) ---------- */
+const DIAL=[['OFF',-90],['V~',-145],['V⎓',-35],['mA⎓',15],['10A',62],['•)))',118],['Ω',165]];
+function dmm(x,y,mode,val,id){
+  const cx=x+70,cy=y+132,sel=mode==='V'?-35:15,selT=mode==='V'?'V⎓':'mA⎓';
+  let s=`<rect x="${x}" y="${y}" width="140" height="222" rx="20" fill="url(#gBoot)" stroke="#7c2210" stroke-width="1.5"/>`+
+    `<rect x="${x+3}" y="${y+60}" width="5" height="40" rx="2.5" fill="#000" opacity=".15"/><rect x="${x+132}" y="${y+60}" width="5" height="40" rx="2.5" fill="#000" opacity=".15"/>`+
+    `<rect x="${x+9}" y="${y+9}" width="122" height="204" rx="13" fill="url(#gFace)"/>`+
+    `<text x="${cx}" y="${y+22}" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" letter-spacing="1.4" fill="#c9cdd1">MULTÍMETRO DIGITAL</text>`+
+    `<rect x="${x+16}" y="${y+27}" width="108" height="52" rx="5" fill="#121416"/><rect x="${x+20}" y="${y+31}" width="100" height="44" rx="3" fill="url(#gLcd)"/>`+
+    `<g id="lcd-${id}" transform="translate(${x+20} ${y+31})">${lcdInner(val)}</g>`;
+  for(const [t,a] of DIAL){const rr=a*Math.PI/180,on=t===selT;
+    s+=`<line x1="${cx+33*Math.cos(rr)}" y1="${cy+33*Math.sin(rr)}" x2="${cx+37*Math.cos(rr)}" y2="${cy+37*Math.sin(rr)}" stroke="${on?'#ffd23f':'#8b9197'}" stroke-width="2"/>`+
+      `<text x="${(cx+47*Math.cos(rr)).toFixed(1)}" y="${(cy+47*Math.sin(rr)+3.5).toFixed(1)}" text-anchor="middle" font-family="Arial,sans-serif" font-size="${on?10:9}" font-weight="700" fill="${on?'#ffd23f':'#d3d7da'}">${t}</text>`;}
+  s+=`<circle cx="${cx}" cy="${cy}" r="31" fill="#141618" stroke="#4d5359" stroke-width="2"/>`+
+    `<g class="knob" style="transform-origin:${cx}px ${cy}px;--a:${sel}deg"><circle cx="${cx}" cy="${cy}" r="25" fill="url(#gKnob)"/><rect x="${cx-4}" y="${cy-4}" width="30" height="8" rx="4" fill="#eef1f3"/><circle cx="${cx}" cy="${cy}" r="5" fill="#2a2e33"/></g>`;
+  const J={A10:[x+28,y+193],COM:[x+70,y+193],V:[x+112,y+193]};
+  const jack=(p,ring,t)=>`<circle cx="${p[0]}" cy="${p[1]}" r="8.5" fill="#101112" stroke="${ring}" stroke-width="2.6"/><circle cx="${p[0]}" cy="${p[1]}" r="3.4" fill="#000"/><text x="${p[0]}" y="${p[1]+17}" text-anchor="middle" font-family="Arial,sans-serif" font-size="7" font-weight="700" fill="#e1e4e6">${t}</text>`;
+  s+=jack(J.A10,'#d33b2c','10A')+jack(J.COM,'#8f969c','COM')+jack(J.V,'#d33b2c','VΩmA');
+  return {svg:s,J};
+}
+
+/* ---------- fuente de laboratorio ---------- */
+function psu(id,V,I){
+  const x=548,y=16,plus=[x+112,y+116],minus=[x+144,y+116],pin=H(24,'e'),nin=H(24,'B-');
+  const plusD=`M${P(plus)} C${plus[0]} ${pin[1]-70} 572 ${pin[1]} ${P(pin)}`;
+  const mc1=[minus[0],nin[1]-40],mc2=[570,nin[1]];
+  const minusFrag=` C${P(mc2)} ${P(mc1)} ${P(minus)}`;
+  const lead=(d,c)=>`<path d="${d}" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="7.6" stroke-linecap="round"/><path d="${d}" fill="none" stroke="${c}" stroke-width="5.2" stroke-linecap="round"/>`;
+  const leads=lead(plusD,'#d7261e')+lead(`M${P(minus)} C${P(mc1)} ${P(mc2)} ${P(nin)}`,'#1f4fd1')+
+    `<circle cx="${pin[0]}" cy="${pin[1]}" r="2.3" fill="#d0d4d6" stroke="#6f7579" stroke-width=".8"/><circle cx="${nin[0]}" cy="${nin[1]}" r="2.3" fill="#d0d4d6" stroke="#6f7579" stroke-width=".8"/>`;
+  const vt=V<10?V.toFixed(2):V.toFixed(1);
+  const body=`<rect x="${x}" y="${y}" width="166" height="136" rx="8" fill="url(#gPsu)" stroke="#6f757a"/>`+
+    `<rect x="${x+8}" y="${y+8}" width="150" height="120" rx="5" fill="#2c3035"/>`+
+    `<rect x="${x+15}" y="${y+15}" width="64" height="32" rx="3" fill="#140808"/><g transform="translate(${x+15} ${y+15})">${seg7(vt,58,6,20,'#ff3b2f','rgba(255,59,47,0.08)')}</g>`+
+    `<rect x="${x+87}" y="${y+15}" width="64" height="32" rx="3" fill="#06120a"/><g id="psa-${id}" transform="translate(${x+87} ${y+15})">${seg7(I.toFixed(3),58,6,20,'#3ff06e','rgba(63,240,110,0.08)')}</g>`+
+    `<text x="${x+47}" y="${y+58}" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#cfd3d6">V</text><text x="${x+119}" y="${y+58}" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="700" fill="#cfd3d6">A</text>`+
+    `<text x="${x+16}" y="${y+76}" font-family="Arial,sans-serif" font-size="8" font-weight="700" letter-spacing="1" fill="#e6e9eb">FUENTE DC</text>`+
+    [x+34,x+68].map(kx=>`<circle cx="${kx}" cy="${y+102}" r="12" fill="url(#gKnob)" stroke="#555"/><rect x="${kx-1.5}" y="${y+91}" width="3" height="9" rx="1.5" fill="#e6e9eb"/>`).join('')+
+    `<circle cx="${plus[0]}" cy="${plus[1]}" r="9" fill="#c62828" stroke="#7d1010"/><circle cx="${plus[0]}" cy="${plus[1]}" r="3.5" fill="#d0d4d6"/>`+
+    `<circle cx="${minus[0]}" cy="${minus[1]}" r="9" fill="#1d1d1d" stroke="#000"/><circle cx="${minus[0]}" cy="${minus[1]}" r="3.5" fill="#d0d4d6"/>`+
+    `<text x="${plus[0]}" y="${plus[1]-14}" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#ff8a80">+</text><text x="${minus[0]}" y="${minus[1]-14}" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#e6e9eb">−</text>`;
+  return {leads,body,plusD,minusFrag};
+}
+
+/* ---------- corriente animada ---------- */
+function flow(d,frac){const du=Math.min(9,0.6/Math.max(frac,0.02)).toFixed(2);return `<path d="${d}" class="flowo" style="animation-duration:${du}s"/><path d="${d}" class="flow" style="animation-duration:${du}s"/>`;}
+
+/* ---------- armado de cada dibujo ---------- */
+/* kind: 'R' (resistencias) o 'C' (condensadores con Rc); topo: 's' serie o 'p' paralelo; mode: 'V' o 'A' */
+function scene(id,kind,topo,mode){
+  const R=N.R,C=N.C,isC=kind==='C',parts=[],labels=[];
+  const Rc=topo==='s'?N.Rcs:N.Rcp;
+  // entrada
+  if(isC){parts.push(res(H(20,'e'),H(16,'e'),Rc,'Rc · '+si(Rc,'Ω'),0,-15),wire(H(16,'a'),H(16,'T+'),'r'));}
+  else parts.push(wire(H(20,'a'),H(18,'T+'),'r'));
+  const entryEnd=isC?H(16,'T+'):H(18,'T+');
+  const entryTail=isC?` L${P(H(20,'e'))} L${P(H(16,'e'))} L${P(H(16,'a'))} L${P(H(16,'T+'))}`:` L${P(H(20,'a'))} L${P(H(18,'T+'))}`;
+  const branchA=(!isC&&topo==='p'&&mode==='A'); // corriente de la rama R2
+  const entryMeter=(mode==='A'&&!branchA);
+  if(!entryMeter){parts.push(wire(H(24,'c'),H(20,'c'),'g'));labels.push(label(440,BY+108,'puente'));}
+  else labels.push(`<text x="462" y="${BY+146}" text-anchor="middle" class="omark">sin puente</text>`);
+  // componentes
+  const comp=(a,b,i,txt,lx,ly,anc)=>isC?cap(a,b,txt.replace('#',si(C[i],'F')),lx+(anc?4:0),ly+(anc?0:2),anc):res(a,b,R[i],txt.replace('#',si(R[i],'Ω')),lx,ly,anc);
+  const L=isC?'C':'R';
+  if(topo==='s'){
+    parts.push(wire(H(2,'T+'),H(2,'a'),'r'),comp(H(2,'d'),H(6,'d'),0,L+'1 · #',0,24),comp(H(6,'b'),H(10,'b'),1,L+'2 · #',0,25),comp(H(10,'d'),H(10,'h'),2,L+'3\n#',14,-4,'start'),wire(H(10,'j'),H(10,'B-'),'n'));
+  }else{
+    [4,9,14].forEach((c,i)=>{if(!(branchA&&c===9))parts.push(wire(H(c,'a'),H(c,'T+'),'r'));parts.push(comp(H(c,'c'),H(c,'h'),i,L+(i+1)+'\n#',13,-4,'start'),wire(H(c,'j'),H(c,'B-'),'n'));});
+    if(branchA)labels.push(`<text x="214" y="${BY+66}" text-anchor="start" class="omark">← cable de R2 quitado</text>`);
+  }
+  // multímetro y puntas
+  let mx,rTip,kTip,rTh=null,kTh=null,val;
+  const sv=topo==='s';
+  if(mode==='V'){mx=sv?100:40;rTip=sv?H(6,'a'):H(9,'b');kTip=sv?H(10,'a'):H(9,'i');
+    const Vm=isC?(sv?N.sC.V2:N.V):(sv?N.sR.V2:N.V);val=dmmVal(Vm,'V');}
+  else if(branchA){mx=4;rTip=H(9,'T+');kTip=H(9,'a');rTh=-34;kTh=34;val=dmmVal(N.pR.I2,'A');}
+  else{mx=388;rTip=H(24,'c');kTip=H(20,'c');val=dmmVal(isC?(sv?N.sC.I0:N.pC.I0):(sv?N.sR.I:N.pR.IT),'A');}
+  const M=dmm(mx,4,mode,val,id);
+  const rp=probe(rTip,'r',M.J.V,rTh),kp=probe(kTip,'k',M.J.COM,kTh);
+  // fuente
+  const Itot=isC?(mode==='A'?(sv?N.sC.I0:N.pC.I0):0):(sv?N.sR.I:N.pR.IT);
+  const S=psu(id,N.V,Itot);
+  // recorridos de la corriente
+  const fl=[];
+  const start=S.plusD+` L${P(H(24,'c'))}`+(entryMeter?viaMeter(rp,kp):` L${P(H(20,'c'))}`)+entryTail;
+  const exitFrom=c=>` L${P(H(c,'B-'))} L${P(H(24,'B-'))}`+S.minusFrag;
+  if(topo==='s'){
+    fl.push(flow(start+` L${P(H(2,'T+'))} L${P(H(2,'a'))} L${P(H(2,'d'))} L${P(H(6,'d'))} L${P(H(6,'b'))} L${P(H(10,'b'))} L${P(H(10,'d'))} L${P(H(10,'h'))} L${P(H(10,'j'))}`+exitFrom(10),1));
+  }else{
+    const Ib=isC?C.map(c=>c/(C[0]+C[1]+C[2])):[N.pR.I1/N.pR.IT,N.pR.I2/N.pR.IT,N.pR.I3/N.pR.IT];
+    fl.push(flow(start+` L${P(H(14,'T+'))}`,1));
+    fl.push(flow(`M${P(H(14,'T+'))} L${P(H(9,'T+'))}`,Ib[0]+Ib[1]),flow(`M${P(H(9,'T+'))} L${P(H(4,'T+'))}`,Ib[0]));
+    [4,9,14].forEach((c,i)=>{
+      const top=(branchA&&c===9)?`M${P(H(9,'T+'))}`+viaMeter(rp,kp):`M${P(H(c,'T+'))} L${P(H(c,'a'))}`;
+      fl.push(flow(top+` L${P(H(c,'c'))} L${P(H(c,'h'))} L${P(H(c,'j'))} L${P(H(c,'B-'))}`,Ib[i]));});
+    fl.push(flow(`M${P(H(4,'B-'))} L${P(H(9,'B-'))}`,Ib[0]),flow(`M${P(H(9,'B-'))} L${P(H(14,'B-'))}`,Ib[0]+Ib[1]),flow(`M${P(H(14,'B-'))}`+exitFrom(24).replace(` L${P(H(24,'B-'))} L${P(H(24,'B-'))}`,` L${P(H(24,'B-'))}`),1));
+  }
+  const fOp=isC&&mode==='V'?0:1;
+  const timer=isC?`<text id="tm-${id}" x="552" y="186" class="tmr">${mode==='V'?'cargado':'t = 0,0 s'}</text>`:'';
+  return boardBase()+parts.join('')+S.leads+rp.cable+kp.cable+rp.body+kp.body+M.svg+S.body+
+    `<g id="fl-${id}" style="opacity:${fOp}">${fl.join('')}</g>`+labels.join('')+timer;
+}
+
+function drawBoards(){
+  $('#bSR').innerHTML=scene('bSR','R','s','V');
+  $('#bSRi').innerHTML=scene('bSRi','R','s','A');
+  $('#bPR').innerHTML=scene('bPR','R','p','V');
+  $('#bPRi').innerHTML=scene('bPRi','R','p','A');
+  $('#bSC').innerHTML=scene('bSC','C','s','V');
+  $('#bSCi').innerHTML=scene('bSCi','C','s','A');
+  $('#bPC').innerHTML=scene('bPC','C','p','V');
+  $('#bPCi').innerHTML=scene('bPCi','C','p','A');
+}
+
+/* ---------- figura de presentación del multímetro ---------- */
+function drawIntro(){
+  const M=dmm(40,12,'V',['3.046','V'],'intro');
+  const co=(pts,tx,ty,title,lines)=>`<path d="M${pts}" class="co"/><circle cx="${pts.split(' ')[0]}" cy="${pts.split(' ')[1]}" r="3" fill="var(--muted)"/>`+
+    `<text x="${tx}" y="${ty}" class="cott">${title}</text>`+lines.map((l,i)=>`<text x="${tx}" y="${ty+17+i*16}" class="cot">${l}</text>`).join('');
+  let s=M.svg;
+  s+=co('150 68 L250 40',258,34,'Pantalla',['Muestra el número y la unidad: V, mA o µA.','“DC” indica corriente continua.']);
+  s+=co('175 120 L250 112',258,106,'Selector giratorio',['V⎓ para voltaje, mA⎓ para corriente, Ω para','resistencia. Déjalo en OFF al terminar.']);
+  s+=co('152 205 L250 190',258,184,'Bornes',['Negra siempre en COM. Roja en VΩmA para todo','lo de esta guía. 10A solo para corrientes grandes.']);
+  $('#dmmIntro').innerHTML=s;
+}
+
+/* ---------- esquemas ---------- */
+function zigH(x1,x2,y){const a=(x1+x2)/2-24;let d=`M${x1} ${y}H${a}`;for(let i=1;i<=6;i++)d+=`L${a+i*8-4} ${y+(i%2?-8:8)}`;d+=`L${a+48} ${y}H${x2}`;return `<path d="${d}" class="w"/>`;}
+function zigV(x,y1,y2){const a=(y1+y2)/2-24;let d=`M${x} ${y1}V${a}`;for(let i=1;i<=6;i++)d+=`L${x+(i%2?8:-8)} ${a+i*8-4}`;d+=`L${x} ${a+48}V${y2}`;return `<path d="${d}" class="w"/>`;}
+function capH(x1,x2,y){const m=(x1+x2)/2;return `<path d="M${x1} ${y}H${m-5}M${m+5} ${y}H${x2}" class="w"/><path d="M${m-5} ${y-13}V${y+13}M${m+5} ${y-13}V${y+13}" class="w pl"/><text x="${m-13}" y="${y-14}" text-anchor="middle" class="sp">+</text>`;}
+function capV(x,y1,y2){const m=(y1+y2)/2;return `<path d="M${x} ${y1}V${m-5}M${x} ${m+5}V${y2}" class="w"/><path d="M${x-13} ${m-5}H${x+13}M${x-13} ${m+5}H${x+13}" class="w pl"/><text x="${x-19}" y="${m-8}" text-anchor="middle" class="sp">+</text>`;}
+function bat(x,y1,y2,V){const m=(y1+y2)/2;return `<path d="M${x} ${y1}V${m-6}M${x} ${m+6}V${y2}" class="w"/><path d="M${x-17} ${m-6}H${x+17}" class="w"/><path d="M${x-9} ${m+6}H${x+9}" class="w pl"/><text x="${x-24}" y="${m-6}" text-anchor="middle" class="sp">+</text><text x="${x+24}" y="${m+5}" class="sn">${si(V,'V')}</text>`;}
+const dot=(x,y)=>`<circle cx="${x}" cy="${y}" r="3.8" class="dt"/>`;
+const T=(x,y,t,c,a)=>`<text x="${x}" y="${y}" text-anchor="${a||'middle'}" class="${c}">${t}</text>`;
+const arR=(x,y)=>`<path d="M${x-5} ${y-5}L${x+4} ${y}L${x-5} ${y+5}Z" class="ar"/>`;
+const arD=(x,y)=>`<path d="M${x-5} ${y-5}L${x} ${y+4}L${x+5} ${y-5}Z" class="ar"/>`;
+function drawSchem(){
+  const R=N.R,C=N.C,V=N.V;
+  let s=bat(60,70,190,V)+`<path d="M60 70H90M170 70H190M270 70H290M370 70H440V190H60" class="w"/>`+zigH(90,170,70)+zigH(190,270,70)+zigH(290,370,70);
+  [130,230,330].forEach((cx,i)=>{s+=T(cx,26,'R'+(i+1),'sn')+T(cx,43,si(R[i],'Ω'),'sl')+T(cx,102,'V'+(i+1)+' = '+si(N.sR['V'+(i+1)],'V'),'sv');});
+  s+=arD(440,130)+T(452,134,'I','sn','start')+T(250,178,'I = '+si(N.sR.I,'A')+' en todo el circuito','sv');
+  $('#sSR').innerHTML=s;
+  const xs=[160,280,400];
+  s=bat(60,40,200,V)+`<path d="M60 40H400M60 200H400" class="w"/>`;
+  xs.forEach((x,i)=>{s+=zigV(x,40,200)+arD(x,72)+T(x+14,112,'R'+(i+1),'sn','start')+T(x+14,128,si(R[i],'Ω'),'sl','start')+T(x+14,147,'I'+(i+1)+' = '+si(N.pR['I'+(i+1)],'A'),'sv','start');});
+  s+=dot(160,40)+dot(280,40)+dot(160,200)+dot(280,200)+arR(112,40)+T(112,28,'I total = '+si(N.pR.IT,'A'),'sv')+T(260,222,'Todas tienen '+si(V,'V'),'sv');
+  $('#sPR').innerHTML=s;
+  s=bat(60,70,190,V)+`<path d="M60 70H80M150 70H190M230 70H265M305 70H340M380 70H440V190H60" class="w"/>`+zigH(80,150,70)+capH(190,230,70)+capH(265,305,70)+capH(340,380,70);
+  s+=T(115,26,'Rc','sn')+T(115,43,si(N.Rcs,'Ω'),'sl');
+  [210,285,360].forEach((cx,i)=>{s+=T(cx,26,'C'+(i+1),'sn')+T(cx,43,si(C[i],'F'),'sl')+T(cx,104,'V'+(i+1)+' = '+si(N.sC['V'+(i+1)],'V'),'sv');});
+  s+=arD(440,130)+T(452,134,'I(t)','sn','start')+T(250,170,'Q = '+si(N.sC.Q,'C')+' en cada uno','sv')+T(250,186,'Ceq = '+si(N.sC.Ceq,'F'),'sl');
+  $('#sSC').innerHTML=s;
+  const xc=[200,300,400];
+  s=bat(60,40,200,V)+`<path d="M60 40H78M148 40H400M60 200H400" class="w"/>`+zigH(78,148,40)+T(113,20,'Rc · '+si(N.Rcp,'Ω'),'sl');
+  xc.forEach((x,i)=>{s+=capV(x,40,200)+T(x+18,108,'C'+(i+1),'sn','start')+T(x+18,124,si(C[i],'F'),'sl','start')+T(x+18,143,'Q'+(i+1)+' = '+si(N.pC['Q'+(i+1)],'C'),'sv','start');});
+  s+=dot(200,40)+dot(300,40)+dot(200,200)+dot(300,200)+T(300,222,'Todos tienen '+si(V,'V')+' · Ceq = '+si(N.pC.Ceq,'F'),'sv');
+  $('#sPC').innerHTML=s;
+}
+
+/* ---------- simulación de carga ---------- */
+const simRAF={};
+function runSim(m){
+  const ids=m==='sC'?['bSC','bSCi']:['bPC','bPCi'],btn=$('#sim-'+m);
+  cancelAnimationFrame(simRAF[m]);
+  const t0=performance.now();btn.textContent='■ Cargando…';
+  const step=now=>{
+    const D=N[m],tau=D.tau,Vf=m==='sC'?D.V2:N.V,t=(now-t0)/1000,e=Math.exp(-t/tau),I=D.I0*e;
+    const set=(id,html)=>{const el=document.getElementById(id);if(el)el.innerHTML=html;};
+    set('lcd-'+ids[0],lcdInner(dmmVal(Vf*(1-e),'V')));
+    set('lcd-'+ids[1],lcdInner(dmmVal(I,'A')));
+    ids.forEach(id=>{set('psa-'+id,seg7(I.toFixed(3),58,6,20,'#3ff06e','rgba(63,240,110,0.08)'));
+      const f=document.getElementById('fl-'+id);if(f)f.style.opacity=Math.max(0,Math.min(1,e*1.15)).toFixed(2);
+      set('tm-'+id,'t = '+t.toFixed(1).replace('.',',')+' s');});
+    if(t<5*tau+1)simRAF[m]=requestAnimationFrame(step);else btn.textContent='↻ Repetir la carga';
+  };
+  simRAF[m]=requestAnimationFrame(step);
+}
+$('#sim-sC').addEventListener('click',()=>runSim('sC'));
+$('#sim-pC').addEventListener('click',()=>runSim('pC'));
+
+/* ---------- hojas de datos ---------- */
+const TABLES={
+  tSR:{tol:5,rows:[['R<sub>eq</sub> con óhmetro (sin fuente)','sR.Req','kΩ',1e3],['Voltaje total','V','V',1],['Corriente total (entrada)','sR.I','mA',1e-3],['Corriente entre R1 y R2','sR.I','mA',1e-3],['Corriente entre R2 y R3','sR.I','mA',1e-3],['V<sub>1</sub> en R1','sR.V1','V',1],['V<sub>2</sub> en R2','sR.V2','V',1],['V<sub>3</sub> en R3','sR.V3','V',1]]},
+  tPR:{tol:5,rows:[['R<sub>eq</sub> con óhmetro (sin fuente)','pR.Req','kΩ',1e3],['V en R1','V','V',1],['V en R2','V','V',1],['V en R3','V','V',1],['I<sub>1</sub> (rama R1)','pR.I1','mA',1e-3],['I<sub>2</sub> (rama R2)','pR.I2','mA',1e-3],['I<sub>3</sub> (rama R3)','pR.I3','mA',1e-3],['Corriente total','pR.IT','mA',1e-3]]},
+  tSC:{tol:20,rows:[['C1 suelto (capacímetro)','C.0','µF',1e-6],['C2 suelto','C.1','µF',1e-6],['C3 suelto','C.2','µF',1e-6],['C<sub>eq</sub> de los tres en serie','sC.Ceq','µF',1e-6],['Corriente inicial I₀','sC.I0','µA',1e-6],['τ (tiempo hasta 37 % de I₀)','sC.tau','s',1],['V<sub>1</sub> en C1','sC.V1','V',1],['V<sub>2</sub> en C2','sC.V2','V',1],['V<sub>3</sub> en C3','sC.V3','V',1],['Voltaje total','V','V',1]]},
+  tPC:{tol:20,rows:[['C<sub>eq</sub> de los tres en paralelo','pC.Ceq','µF',1e-6],['Corriente inicial I₀','pC.I0','mA',1e-3],['τ (tiempo hasta 37 % de I₀)','pC.tau','s',1],['V en C1','V','V',1],['V en C2','V','V',1],['V en C3','V','V',1]]}
+};
+function buildTables(){
+  for(const id in TABLES){
+    const t=TABLES[id];let h=`<table><thead><tr><th>Medición</th><th>Teórico</th><th>Medido</th><th>Error</th></tr></thead><tbody>`;
+    t.rows.forEach((r,i)=>{const mid=`m-${id}-${i}`;h+=`<tr><td>${r[0]}</td><td class="num" id="t-${mid}"></td><td class="num"><input id="${mid}" inputmode="decimal" aria-label="${r[0].replace(/<[^>]+>/g,'')} medido en ${r[2]}" value="${(saved[mid]||'').replace(/"/g,'')}"> ${r[2]}</td><td id="e-${mid}"></td></tr>`;});
+    h+=`</tbody></table>`;$('#'+id).innerHTML=h;
+    t.rows.forEach((r,i)=>{const mid=`m-${id}-${i}`;$('#'+mid).addEventListener('input',e=>{saved[mid]=e.target.value;save();updateErr(id,i);});});
+  }
+}
+function updateErr(id,i){
+  const t=TABLES[id],r=t.rows[i],mid=`m-${id}-${i}`,th=get(N,r[1])/r[3],raw=$('#'+mid).value.trim().replace(',','.'),m=parseFloat(raw),cell=$('#e-'+mid);
+  if(raw===''||!isFinite(m)){cell.innerHTML='';return;}
+  const e=Math.abs(m-th)/Math.abs(th)*100,cls=e<=t.tol?'ok':(e<=t.tol*2?'mid':'bad');
+  cell.innerHTML=`<span class="err ${cls}">${e.toFixed(1).replace('.',',')} %</span>`;
+}
+function updateTables(){for(const id in TABLES){TABLES[id].rows.forEach((r,i)=>{$(`#t-m-${id}-${i}`).textContent=fx(get(N,r[1])/r[3])+' '+r[2];updateErr(id,i);});}}
+
+/* ---------- render ---------- */
+function render(){
+  N=compute();
+  document.querySelectorAll('[data-k]').forEach(el=>{el.textContent=si(get(N,el.dataset.k),el.dataset.u);});
+  $('#bandsOut').innerHTML=N.R.map((R,i)=>{const b=bands(R);return `<div class="bandrow"><b>R${i+1} · ${si(R,'Ω')}</b><span><span class="sw" style="background:${BC[b[0]]}"></span><span class="sw" style="background:${BC[b[1]]}"></span><span class="sw" style="background:${multC(b[2])}"></span><span class="sw" style="background:#c9a227"></span></span><span style="color:var(--muted)">${BN[b[0]]} · ${BN[b[1]]} · ${multN(b[2])} · dorado</span></div>`;}).join('');
+  const pmax=Math.max(N.sR.P1,N.sR.P2,N.sR.P3,N.pR.P1,N.pR.P2,N.pR.P3);
+  $('#alertP').classList.toggle('on',pmax>0.25);
+  $('#alertPtxt').textContent=`Con estos valores una resistencia disiparía ${si(pmax,'W')}, más que los 0,25 W que aguanta una resistencia de ¼ W. Baja el voltaje o usa resistencias mayores.`;
+  $('#alertV').classList.toggle('on',N.V>16);
+  $('#alertVtxt').textContent=`En paralelo cada condensador recibe ${si(N.V,'V')}. Usa condensadores de un voltaje nominal mayor.`;
+  drawSchem();drawBoards();updateTables();
+  ['sC','pC'].forEach(m=>{cancelAnimationFrame(simRAF[m]);const b=$('#sim-'+m);if(b)b.textContent='▶ Simular la carga';});
+}
+const IDS=['inV','inR1','inR2','inR3','inC1','inC2','inC3','inRcs','inRcp'];
+IDS.forEach(id=>{const el=$('#'+id);if(saved[id])el.value=saved[id];el.addEventListener('input',()=>{saved[id]=el.value;save();render();});});
+drawIntro();buildTables();render();
+})();
+</script>

@@ -2,6 +2,7 @@
 titulo: "Lee sensores I²C con Arduino y grafícalos en MATLAB"
 resumen: "Conecta un MPU6050 y un MLX90614 al mismo bus I²C, aprende el protocolo serie y arma un dashboard de telemetría y análisis de vibración FFT en tiempo real con MATLAB."
 date: 2026-09-10
+layout: tutorial
 nivel: "Básico"
 duracion: "25 min"
 tags: [Arduino, MATLAB, Sensores, I2C, MPU6050, MLX90614, Telemetría]
@@ -82,7 +83,7 @@ requisitos:
 Aprende los fundamentos del protocolo I²C mediante la masterclass audiovisual a continuación. Incluye narración guiada en español con voz didáctica, animación de señales de reloj y datos, conexionado de pines y flujo de adquisición en MATLAB. Puedes cambiar de capítulo o ajustar la velocidad de reproducción libremente.
 
 <div class="i2c-embed">
-  <iframe src="/tutoriales/sensores-i2c/?tutorial=i2c&view=video&embed=true" height="690px" title="Video Explicativo de Sensores I2C con Arduino y MATLAB" allow="autoplay" loading="lazy"></iframe>
+  <iframe src="/tutoriales/ley-de-ohm/?tutorial=i2c&view=video&embed=true" height="690px" title="Video Explicativo de Sensores I2C con Arduino y MATLAB" allow="autoplay" loading="lazy"></iframe>
 </div>
 
 ---
@@ -92,7 +93,7 @@ Aprende los fundamentos del protocolo I²C mediante la masterclass audiovisual a
 Experimenta en tiempo real con la unidad inercial **MPU6050** y el termómetro óptico **MLX90614**. Ajusta los ángulos de balanceo (Roll) y cabeceo (Pitch) para ver la descomposición del vector de gravedad terrestre ($a_x, a_y, a_z$), simula la temperatura de superficies infrarrojas y observa la trama de 9 bits en el osciloscopio digital:
 
 <div class="i2c-embed">
-  <iframe src="/tutoriales/sensores-i2c/?tutorial=i2c&view=lab&embed=true" height="1140px" title="Laboratorio Virtual de Sensores I2C" loading="lazy"></iframe>
+  <iframe src="/tutoriales/ley-de-ohm/?tutorial=i2c&view=lab&embed=true" height="1140px" title="Laboratorio Virtual de Sensores I2C" loading="lazy"></iframe>
 </div>
 
 ---
@@ -152,7 +153,7 @@ Ambos módulos son esclavos I²C y comparten exactamente las dos mismas líneas 
 Comprueba la conectividad del hardware desde MATLAB. Ejecuta el escáner para verificar que ambos sensores responden con el bit de reconocimiento (ACK) en sus direcciones fijas de 7 bits:
 
 <div class="i2c-embed">
-  <iframe src="/tutoriales/sensores-i2c/?tutorial=i2c&view=scanner&embed=true" height="660px" title="Escáner de Direcciones I2C y Terminal MATLAB" loading="lazy"></iframe>
+  <iframe src="/tutoriales/ley-de-ohm/?tutorial=i2c&view=scanner&embed=true" height="660px" title="Escáner de Direcciones I2C y Terminal MATLAB" loading="lazy"></iframe>
 </div>
 
 ### Código de comprobación en MATLAB:
@@ -193,7 +194,7 @@ pitch = atan2d(-acc(1), hypot(acc(2), acc(3)));
 
 % === LECTURA DEL MLX90614 ===
 mlx = device(a, 'I2CAddress', 0x5A);
-raw = read(mlx, 1, 'uint16');  % Registro 0x07 de temperatura de objeto
+raw = readRegister(mlx, 0x07, 'uint16');  % Registro 0x07: temperatura del objeto
 
 % Conversión de escala: 0.02 K/LSB a grados Celsius
 temp_celsius = (double(raw) * 0.02) - 273.15;
@@ -206,7 +207,7 @@ temp_celsius = (double(raw) * 0.02) - 273.15;
 Para evitar que la interfaz de MATLAB se congele al graficar datos de alta velocidad, adquiere en bloques de muestras y utiliza el objeto `animatedline` junto con `drawnow limitrate`:
 
 <div class="i2c-embed">
-  <iframe src="/tutoriales/sensores-i2c/?tutorial=i2c&view=telemetry&embed=true" height="740px" title="Dashboard de Telemetría y Análisis FFT" loading="lazy"></iframe>
+  <iframe src="/tutoriales/ley-de-ohm/?tutorial=i2c&view=telemetry&embed=true" height="740px" title="Dashboard de Telemetría y Análisis FFT" loading="lazy"></iframe>
 </div>
 
 ```matlab
@@ -232,12 +233,12 @@ end
 Pon a prueba tu comprensión sobre diseño de buses I²C, cálculo de resistencias pull-up y análisis de vibraciones mecánicas:
 
 <div class="i2c-embed">
-  <iframe src="/tutoriales/sensores-i2c/?tutorial=i2c&view=quiz&embed=true" height="720px" title="Quiz Técnico de Sensores I2C" loading="lazy"></iframe>
+  <iframe src="/tutoriales/ley-de-ohm/?tutorial=i2c&view=quiz&embed=true" height="720px" title="Quiz Técnico de Sensores I2C" loading="lazy"></iframe>
 </div>
 
 ---
 
 <p style="margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
-  <a class="btn" href="/tutoriales/sensores-i2c/?tutorial=i2c" target="_blank">🚀 Abrir Laboratorio I²C en Pantalla Completa →</a>
+  <a class="btn" href="/tutoriales/ley-de-ohm/?tutorial=i2c" target="_blank">🚀 Abrir Laboratorio I²C en Pantalla Completa →</a>
   <a class="btn" href="/tutoriales/" style="background: transparent; border-color: var(--line);">← Volver a Tutoriales</a>
 </p>

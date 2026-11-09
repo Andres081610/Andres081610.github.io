@@ -1,0 +1,199 @@
+---
+titulo: "Primeros pasos con el ESP32, de la caja al WiFi"
+resumen: "Conoce la placa parte por parte, instala el entorno, haz parpadear el LED y conéctate a tu red WiFi. Con simuladores para ver qué pasa antes de tocar el hardware."
+date: 2026-04-10
+layout: guia
+nivel: "Básico"
+duracion: "30 min"
+tags: [ESP32, Arduino, WiFi]
+requisitos: ["Placa ESP32 DevKit", "Cable USB de datos (no solo de carga)", "Arduino IDE 2"]
+---
+
+<section id="placa" data-toc="Conoce la placa">
+  <div class="eyebrow">Antes de conectar nada</div>
+  <h2>Conoce tu placa</h2>
+  <p>El ESP32 DevKit es una placa con un microcontrolador de dos núcleos, WiFi y Bluetooth integrados. Toca cada parte para ver para qué sirve.</p>
+  <div class="calc">
+    <div class="seg" role="group" aria-label="Partes de la placa" id="partBtns">
+      <button type="button" data-part="mod" aria-pressed="true">Módulo</button><button type="button" data-part="ant">Antena</button><button type="button" data-part="usb">USB</button><button type="button" data-part="en">EN</button><button type="button" data-part="boot">BOOT</button><button type="button" data-part="led">LED</button><button type="button" data-part="pins">Pines</button>
+    </div>
+    <div class="fig" style="border:0;padding:0"><svg class="wide" id="boardSvg" viewBox="0 0 640 300" role="img" aria-label="Placa ESP32 DevKit con sus partes señaladas"></svg></div>
+    <div class="callout" aria-live="polite"><div class="t" id="partT"></div><p id="partD"></p></div>
+  </div>
+  <div class="idea"><div class="t">Idea principal</div><p>El ESP32 trabaja a 3,3 V. Nunca le metas 5 V por un pin de entrada.</p></div>
+</section>
+
+<section id="instalar" data-toc="Instalar el entorno">
+  <div class="eyebrow">Una sola vez</div>
+  <h2>Instala el soporte en Arduino IDE</h2>
+  <ol class="gsteps">
+    <li><b>Instala Arduino IDE 2</b>Descárgalo de arduino.cc e instálalo como cualquier programa.</li>
+    <li><b>Agrega la URL de Espressif</b>Ve a <i>Archivo → Preferencias</i> y en "URLs adicionales del gestor de placas" pega:
+      <pre><code>https://espressif.github.io/arduino-esp32/package_esp32_index.json</code></pre></li>
+    <li><b>Instala las placas</b>Abre el <i>Gestor de placas</i> (icono de la placa en la barra izquierda), busca <code>esp32</code> e instala <b>esp32 by Espressif Systems</b>. Tarda unos minutos.</li>
+    <li><b>Elige tu placa y el puerto</b>En <i>Herramientas → Placa</i> elige <b>ESP32 Dev Module</b>. Conecta el cable y en <i>Herramientas → Puerto</i> elige el que apareció (COM3, COM4… en Windows; /dev/ttyUSB0 en Linux).</li>
+  </ol>
+  <div class="callout warn"><div class="t">¿No aparece ningún puerto?</div><p>Revisa el chip USB de tu placa (está cerca del conector): si dice <b>CP2102</b> instala el driver CP210x de Silicon Labs; si dice <b>CH340</b>, el driver CH34x. Y prueba otro cable: muchos cables solo cargan y no transmiten datos.</p></div>
+</section>
+
+<section id="blink" data-toc="Tu primer programa">
+  <div class="eyebrow">Hola mundo</div>
+  <h2>Haz parpadear el LED</h2>
+  <p>Todo programa de Arduino tiene dos partes: <code>setup()</code> se ejecuta <b>una vez</b> al encender y <code>loop()</code> se repite <b>para siempre</b>.</p>
+  <div class="fig"><svg class="sch" viewBox="0 0 520 150" role="img" aria-label="Diagrama de flujo: encender, setup una vez, loop que se repite">
+    <rect x="10" y="50" width="100" height="44" rx="22" class="box"/><text x="60" y="77" text-anchor="middle" class="sn">Encender</text>
+    <path d="M110 72H150" class="lnc"/><path d="M144 66l8 6-8 6z" class="ar"/>
+    <rect x="152" y="50" width="120" height="44" rx="8" class="boxa"/><text x="212" y="70" text-anchor="middle" class="sn">setup()</text><text x="212" y="86" text-anchor="middle" class="sl">una vez</text>
+    <path d="M272 72H312" class="lnc"/><path d="M306 66l8 6-8 6z" class="ar"/>
+    <rect x="314" y="50" width="120" height="44" rx="8" class="boxm"/><text x="374" y="70" text-anchor="middle" class="sn">loop()</text><text x="374" y="86" text-anchor="middle" class="sl">para siempre</text>
+    <path d="M434 72H470V128H340V96" class="lnm"/><path d="M334 102l6-9 6 9z" fill="var(--mag)"/>
+    <text x="470" y="146" text-anchor="end" class="sm">se repite</text></svg></div>
+  <p>Mueve el control para cambiar la pausa: el código y el LED cambian juntos.</p>
+  <div class="calc">
+    <label class="ctrl"><span>delay()</span><input type="range" id="bD" min="50" max="2000" step="50" value="500"><output id="bDo"></output></label>
+    <div class="grid2" style="align-items:center">
+<pre><code><span class="k">void</span> setup() {
+  pinMode(<span class="n">2</span>, OUTPUT);   <span class="c">// el pin 2 será salida</span>
+}
+
+<span class="k">void</span> loop() {
+  digitalWrite(<span class="n">2</span>, HIGH);  <span class="c">// enciende</span>
+  delay(<span class="n" id="bC1">500</span>);
+  digitalWrite(<span class="n">2</span>, LOW);   <span class="c">// apaga</span>
+  delay(<span class="n" id="bC2">500</span>);
+}</code></pre>
+      <svg viewBox="0 0 200 160" role="img" aria-label="LED que parpadea según el retardo elegido" style="width:100%;max-width:240px;margin:0 auto;display:block">
+        <defs><radialGradient id="bGlow"><stop offset="0" stop-color="#4d9bff" stop-opacity=".95"/><stop offset="1" stop-color="#4d9bff" stop-opacity="0"/></radialGradient></defs>
+        <rect x="40" y="70" width="120" height="70" rx="8" fill="#1c2a3a" stroke="var(--line)"/>
+        <circle id="bHalo" cx="100" cy="100" r="44" fill="url(#bGlow)"/>
+        <rect id="bLed" x="90" y="92" width="20" height="14" rx="3" fill="#4d9bff"/>
+        <text x="100" y="128" text-anchor="middle" class="sl" style="fill:#b8c4d4">GPIO 2</text>
+        <text x="100" y="40" text-anchor="middle" class="sv" id="bHz"></text>
+      </svg>
+    </div>
+  </div>
+  <div class="callout"><div class="t">Para subirlo</div><p>Pulsa la flecha <b>→ Subir</b>. Si se queda en <code>Connecting....____</code>, mantén presionado <kbd>BOOT</kbd> hasta que empiece a escribir porcentajes y suéltalo. Luego pulsa <kbd>EN</kbd> si no arranca solo.</p></div>
+</section>
+
+<section id="wifi" data-toc="Conectarse a WiFi">
+  <div class="eyebrow">Lo que lo hace especial</div>
+  <h2>Conéctate a tu red WiFi</h2>
+  <pre><code><span class="k">#include</span> &lt;WiFi.h&gt;
+
+<span class="k">const char</span>* red   = <span class="s">"MiRed"</span>;
+<span class="k">const char</span>* clave = <span class="s">"mi-clave"</span>;
+
+<span class="k">void</span> setup() {
+  Serial.begin(<span class="n">115200</span>);
+  WiFi.begin(red, clave);
+  Serial.print(<span class="s">"Conectando a "</span>); Serial.print(red);
+  <span class="k">while</span> (WiFi.status() != WL_CONNECTED) {
+    delay(<span class="n">300</span>); Serial.print(<span class="s">"."</span>);
+  }
+  Serial.println(); Serial.print(<span class="s">"¡Conectado! IP: "</span>);
+  Serial.println(WiFi.localIP());
+}
+
+<span class="k">void</span> loop() {}</code></pre>
+  <p>Abre el <i>Monitor serie</i> (lupa arriba a la derecha) a <b>115200 baudios</b>. Esto es lo que vas a ver:</p>
+  <div class="simbar"><button class="simbtn" id="wBtn" type="button">▶ Simular el arranque</button><small>Así se ve el monitor serie cuando todo sale bien.</small></div>
+  <pre aria-live="polite" id="wTerm" style="min-height:150px"><code>Pulsa el botón para simular…</code></pre>
+  <div class="fig"><svg class="sch" viewBox="0 0 520 120" role="img" aria-label="Estados de la conexión WiFi: desconectado, conectando, conectado con IP">
+    <g id="wSt0"><rect x="10" y="36" width="140" height="48" rx="10" class="box"/><text x="80" y="58" text-anchor="middle" class="sn">WiFi.begin()</text><text x="80" y="74" text-anchor="middle" class="sl">pide conexión</text></g>
+    <path d="M150 60H190" class="ln"/><path d="M184 54l8 6-8 6z" fill="var(--muted)"/>
+    <g id="wSt1"><rect x="192" y="36" width="140" height="48" rx="10" class="box"/><text x="262" y="58" text-anchor="middle" class="sn">Conectando</text><text x="262" y="74" text-anchor="middle" class="sl">clave, DHCP…</text></g>
+    <path d="M332 60H372" class="ln"/><path d="M366 54l8 6-8 6z" fill="var(--muted)"/>
+    <g id="wSt2"><rect x="374" y="36" width="140" height="48" rx="10" class="box"/><text x="444" y="58" text-anchor="middle" class="sn">WL_CONNECTED</text><text x="444" y="74" text-anchor="middle" class="sl">ya tiene IP</text></g></svg></div>
+  <div class="callout warn"><div class="t">Solo redes de 2,4 GHz</div><p>El ESP32 no ve redes de 5 GHz. Si tu router tiene las dos con el mismo nombre y no conecta, crea una red de 2,4 GHz aparte.</p></div>
+</section>
+
+<section id="pines" data-toc="Pines que importan">
+  <div class="eyebrow">Para no quemar nada</div>
+  <h2>Los pines que debes conocer</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Pines</th><th>Qué pasa</th><th>Consejo</th></tr></thead>
+    <tbody>
+      <tr><td class="num">GPIO 6 a 11</td><td>Están conectados a la memoria flash interna.</td><td><b>No los uses</b> nunca.</td></tr>
+      <tr><td class="num">GPIO 0, 2, 12, 15</td><td>Son pines de arranque (<i>strapping</i>): su nivel al encender decide cómo arranca.</td><td>Evita conectarles cosas que los fuercen al encender.</td></tr>
+      <tr><td class="num">GPIO 34 a 39</td><td>Solo entrada, sin resistencia pull-up interna.</td><td>Perfectos para leer sensores analógicos.</td></tr>
+      <tr><td class="num">ADC2 (GPIO 0, 2, 4, 12–15, 25–27)</td><td>No funcionan como analógicos mientras el WiFi está activo.</td><td>Con WiFi, lee analógico en ADC1 (GPIO 32–39).</td></tr>
+      <tr><td class="num">Todos</td><td>Lógica de 3,3 V. Corriente recomendada ≈ 20 mA por pin.</td><td>Para relés o motores usa un transistor.</td></tr>
+    </tbody></table></div>
+  <div class="quiz">
+    <p class="q">Quieres leer un potenciómetro mientras el ESP32 envía datos por WiFi. ¿Qué pin usas?</p>
+    <div class="opts">
+      <button data-why="GPIO 4 es del ADC2, que no funciona con el WiFi encendido.">GPIO 4</button>
+      <button data-ok data-why="GPIO 34 es del ADC1 y solo de entrada: ideal para esto.">GPIO 34</button>
+      <button data-why="GPIO 6 está conectado a la memoria flash: nunca lo uses.">GPIO 6</button>
+    </div><p class="fb"></p>
+  </div>
+</section>
+
+<section id="errores" data-toc="Errores comunes">
+  <div class="eyebrow">Diagnóstico</div>
+  <h2>Errores comunes</h2>
+  <div class="grid2">
+    <div class="gcard"><h3>"Failed to connect to ESP32"</h3><p>Mantén <kbd>BOOT</kbd> presionado al empezar la subida. Si pasa siempre, pon un condensador de 10 µF entre EN y GND.</p></div>
+    <div class="gcard"><h3>El monitor muestra símbolos raros</h3><p>La velocidad del monitor no coincide con <code>Serial.begin()</code>. Ponla en 115200.</p></div>
+    <div class="gcard"><h3>Se reinicia solo con el WiFi</h3><p>Picos de consumo de hasta 300 mA: el puerto USB o el cable no alcanzan. Usa otro puerto, un cable corto o una fuente externa.</p></div>
+    <div class="gcard"><h3>El LED de la placa no parpadea</h3><p>Algunas placas tienen el LED en otro pin o no lo traen. Conecta un LED con su resistencia de 220 Ω al GPIO 2.</p></div>
+  </div>
+  <p>Siguiente paso: lee un sensor y muestra el valor en una página web servida por el propio ESP32. Si vas a alimentarlo con batería, mira cómo <a href="{{ '/tutoriales/2026-08-20-presupuesto-energetico-iot/' | relative_url }}">calcular su autonomía</a>.</p>
+</section>
+
+<script>
+(function(){
+var $=G.$;
+var PARTS={
+  mod:['Módulo ESP32-WROOM','La lata metálica guarda el microcontrolador de dos núcleos a 240 MHz, la memoria flash (4 MB normalmente) y el radio de WiFi y Bluetooth.'],
+  ant:['Antena impresa','La pista en zigzag es la antena. No pongas metal, cables ni tu mano encima: la señal WiFi cae mucho.'],
+  usb:['Conector USB y chip USB-serie','Alimenta la placa con 5 V y comunica el computador con el ESP32. Un regulador baja los 5 V a los 3,3 V que usa el chip.'],
+  en:['Botón EN (reset)','Reinicia el programa desde el principio. Útil para ver los mensajes de arranque en el monitor serie.'],
+  boot:['Botón BOOT','Si lo mantienes presionado al arrancar, el ESP32 entra en modo de programación. Se usa cuando la subida no conecta sola.'],
+  led:['LED en GPIO 2','En la mayoría de los DevKit hay un LED azul conectado al GPIO 2. Es el que vas a hacer parpadear.'],
+  pins:['Pines de conexión','Dos filas de pines: 3V3 y GND para alimentar sensores, VIN (5 V del USB) y los GPIO numerados para entradas y salidas.']
+};
+var sel='mod';
+function board(){
+  var h=function(k){return sel===k?' style="filter:drop-shadow(0 0 8px var(--cyan))" stroke="var(--cyan)" stroke-width="3"':'';};
+  var pins='',labsT=['3V3','EN','36','39','34','35','32','33','25','26','27','14','12','GND'],labsB=['VIN','GND','13','15','2','4','16','17','5','18','19','21','22','23'];
+  for(var i=0;i<14;i++){var x=150+i*26;
+    pins+='<rect x="'+(x-6)+'" y="66" width="12" height="12" rx="2" fill="#d4af37"'+(sel==='pins'?' stroke="var(--cyan)" stroke-width="2"':'')+'/><text x="'+x+'" y="56" text-anchor="middle" style="font:600 9px var(--mono);fill:var(--muted)">'+labsT[i]+'</text>';
+    pins+='<rect x="'+(x-6)+'" y="222" width="12" height="12" rx="2" fill="#d4af37"'+(sel==='pins'?' stroke="var(--cyan)" stroke-width="2"':'')+'/><text x="'+x+'" y="252" text-anchor="middle" style="font:600 9px var(--mono);fill:'+(labsB[i]==='2'?'var(--cyan)':'var(--muted)')+'">'+labsB[i]+'</text>';}
+  var s='<rect x="110" y="60" width="400" height="180" rx="10" fill="#14324a" stroke="#0b1f30" stroke-width="2"/>'+pins+
+   /* módulo */
+   '<rect x="250" y="92" width="190" height="116" rx="4" fill="#2a2f36"'+h('mod')+'/><rect x="262" y="104" width="128" height="92" rx="3" fill="url(#gMod)"/><text x="326" y="146" text-anchor="middle" style="font:700 12px var(--mono);fill:#3b4048">ESP32</text><text x="326" y="162" text-anchor="middle" style="font:600 9px var(--mono);fill:#4b525c">WROOM-32</text>'+
+   /* antena */
+   '<g'+h('ant')+'><rect x="394" y="104" width="40" height="92" rx="2" fill="#1c2026" stroke="#3a3f47"/><path d="M402 112H426V124H406V136H426V148H406V160H426V172H406V188" fill="none" stroke="#d4af37" stroke-width="2.4"/></g>'+
+   /* usb */
+   '<g'+h('usb')+'><rect x="86" y="128" width="44" height="44" rx="4" fill="#b9c0c8" stroke="#6b737c"/><rect x="92" y="140" width="32" height="20" rx="3" fill="#5a6168"/></g><rect x="150" y="130" width="40" height="40" rx="3" fill="#20242a"/><text x="170" y="154" text-anchor="middle" style="font:600 7px var(--mono);fill:#8f98a3">USB-UART</text>'+
+   /* botones */
+   '<g'+h('en')+'><rect x="146" y="92" width="34" height="26" rx="4" fill="#d9dde2"/><circle cx="163" cy="105" r="7" fill="#2a2f36"/></g><text x="163" y="88" text-anchor="middle" style="font:700 9px var(--mono);fill:#e6edf3">EN</text>'+
+   '<g'+h('boot')+'><rect x="146" y="184" width="34" height="26" rx="4" fill="#d9dde2"/><circle cx="163" cy="197" r="7" fill="#2a2f36"/></g><text x="163" y="222" text-anchor="middle" style="font:700 9px var(--mono);fill:#e6edf3">BOOT</text>'+
+   /* led */
+   '<g'+h('led')+'><rect x="206" y="186" width="14" height="10" rx="2" fill="#4d9bff" class="blink"/><rect x="206" y="104" width="14" height="10" rx="2" fill="#ff4d4d"/></g><text x="213" y="182" text-anchor="middle" style="font:600 8px var(--mono);fill:#9fc3ff">IO2</text><text x="213" y="126" text-anchor="middle" style="font:600 8px var(--mono);fill:#ffb3b3">PWR</text>'+
+   '<defs><linearGradient id="gMod" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e9ecef"/><stop offset="1" stop-color="#aab1b9"/></linearGradient></defs>';
+  $('#boardSvg').innerHTML=s;$('#partT').textContent=PARTS[sel][0];$('#partD').textContent=PARTS[sel][1];
+}
+G.$$('[data-part]').forEach(function(b){b.addEventListener('click',function(){sel=b.dataset.part;G.$$('[data-part]').forEach(function(x){x.setAttribute('aria-pressed',x===b);});board();});});
+board();
+
+/* parpadeo */
+var t=null,on=true;
+function blink(){var d=+$('#bD').value;$('#bDo').textContent=d+' ms';$('#bC1').textContent=d;$('#bC2').textContent=d;
+  $('#bHz').textContent=(1000/(2*d)).toFixed(2).replace('.',',')+' parpadeos por segundo';
+  clearInterval(t);if(G.reduced)return;t=setInterval(function(){on=!on;$('#bLed').style.opacity=on?1:.15;$('#bHalo').style.opacity=on?1:0;},d);}
+$('#bD').addEventListener('input',blink);blink();
+
+/* monitor serie simulado */
+var busy=false;
+$('#wBtn').addEventListener('click',function(){if(busy)return;busy=true;var term=$('#wTerm code'),out='',steps=[];
+  var st=function(i){[0,1,2].forEach(function(j){var r=$('#wSt'+j+' rect');r.setAttribute('class',j===i?'boxa':'box');});};
+  steps.push(['ets Jun  8 2016 00:22:57\nrst:0x1 (POWERON_RESET),boot:0x13\n',400,0]);
+  steps.push(['Conectando a MiRed',500,0]);
+  for(var i=0;i<9;i++)steps.push(['.',300,1]);
+  steps.push(['\n¡Conectado! IP: 192.168.1.42\n',0,2]);
+  var k=0;(function go(){if(k>=steps.length){busy=false;$('#wBtn').textContent='↻ Repetir';return;}var s=steps[k++];out+=s[0];term.textContent=out;st(s[2]);setTimeout(go,G.reduced?0:s[1]);})();
+});
+})();
+</script>

@@ -21,7 +21,7 @@
   document.querySelectorAll('.spot').forEach(function(el){el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();
     el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')})});
   // botón copiar en bloques de código
-  document.querySelectorAll('.prose pre').forEach(function(pre){var b=document.createElement('button');b.className='copy-btn';b.type='button';b.textContent='Copiar';
+  document.querySelectorAll('.prose pre, .guia pre').forEach(function(pre){var b=document.createElement('button');b.className='copy-btn';b.type='button';b.textContent='Copiar';
     b.onclick=function(){var t=pre.querySelector('code')||pre;navigator.clipboard&&navigator.clipboard.writeText(t.innerText).then(function(){b.textContent='¡Copiado!';b.classList.add('ok');
       setTimeout(function(){b.textContent='Copiar';b.classList.remove('ok')},1800)})};pre.appendChild(b)});
   // barra de lectura y volver arriba
@@ -76,4 +76,12 @@
   lb.onclick=function(e){if(e.target===lb)lb.hidden=true};
   document.addEventListener('keydown',function(e){if(lb.hidden)return;
     if(e.key==='Escape')lb.hidden=true;if(e.key==='ArrowLeft')show(k-1);if(e.key==='ArrowRight')show(k+1)});
+})();
+
+/* iframes de laboratorios propios: ajustan su alto al contenido para no tener doble barra de desplazamiento */
+(function(){
+  document.querySelectorAll('.prose iframe[src^="/"]').forEach(function(f){
+    function fit(){try{var d=f.contentDocument;if(!d||!d.documentElement)return;var h=Math.max(d.documentElement.scrollHeight,d.body?d.body.scrollHeight:0);if(h>100)f.style.height=h+'px';}catch(e){}}
+    f.addEventListener('load',function(){fit();try{var d=f.contentDocument;if(window.ResizeObserver&&d){new ResizeObserver(fit).observe(d.documentElement);if(d.body)new ResizeObserver(fit).observe(d.body);}}catch(e){}setTimeout(fit,800);setTimeout(fit,2500);});
+  });
 })();

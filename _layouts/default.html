@@ -23,6 +23,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@500;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  {% if page.layout == 'guia' or page.collection == 'tutoriales' %}<link rel="stylesheet" href="{{ '/assets/css/guia.css' | relative_url }}">{% endif %}
 </head>
 <body>
   <div class="bg-grid" aria-hidden="true"></div><div class="bg-glow" aria-hidden="true"></div>

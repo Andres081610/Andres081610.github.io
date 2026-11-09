@@ -1,0 +1,43 @@
+---
+layout: default
+---
+<div class="progress" aria-hidden="true"><span data-progress></span></div>
+<article class="wrap entry guia-page">
+  <header class="entry-head">
+    <div class="meta-block">
+      <span class="num">T</span>
+      <dl>
+        <div><dt>Tipo</dt><dd>Guía interactiva</dd></div>
+        <div><dt>Nivel</dt><dd>{{ page.nivel }}</dd></div>
+        <div><dt>Tiempo</dt><dd>{{ page.duracion }}</dd></div>
+        <div><dt>Publicado</dt><dd>{{ page.date | date: "%d/%m/%Y" }}</dd></div>
+      </dl>
+    </div>
+    <h1>{{ page.titulo }}</h1>
+    <p class="lead">{{ page.resumen }}</p>
+    <p class="tags">{% for t in page.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+  </header>
+  <nav class="gtoc" aria-label="Contenido de la guía" data-gtoc></nav>
+  {% if page.requisitos %}
+  <div class="gneed">
+    <span class="gneed-t">Necesitas</span>
+    <ul>{% for r in page.requisitos %}<li>{{ r }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+  <script src="{{ '/assets/js/guia.js' | relative_url }}"></script>
+  <div class="guia">
+    {{ content }}
+  </div>
+  {% assign tuts = site.tutoriales | sort: 'date' %}
+  {% for t in tuts %}{% if t.url == page.url %}{% assign i = forloop.index0 %}{% endif %}{% endfor %}
+  {% assign prev_i = i | minus: 1 %}{% assign next_i = i | plus: 1 %}
+  <nav class="pager gpager">
+    {% if prev_i >= 0 %}{% assign p = tuts[prev_i] %}<a href="{{ p.url | relative_url }}"><small>← Anterior</small>{{ p.titulo }}</a>{% else %}<span></span>{% endif %}
+    <a href="{{ '/tutoriales/' | relative_url }}" class="gpager-all">Todos los tutoriales</a>
+    {% if tuts[next_i] %}{% assign n = tuts[next_i] %}<a href="{{ n.url | relative_url }}" class="nx"><small>Siguiente →</small>{{ n.titulo }}</a>{% else %}<span></span>{% endif %}
+  </nav>
+  <aside class="gcta">
+    <p><b>¿Te trabaste con tu circuito?</b> Te ayudo a resolverlo en una tutoría personalizada.</p>
+    <a class="btn" href="{{ '/asesorias/' | relative_url }}">Ver tutorías</a>
+  </aside>
+</article>
