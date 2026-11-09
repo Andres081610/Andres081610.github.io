@@ -1,0 +1,40 @@
+# ====== Datos del sitio (edita esto) ======
+title: "Andrés Rodríguez · Lab"
+autor: "Andrés Rodríguez"
+nombre_corto: "Andrés"
+nombre_completo: "Jehison Andrés Rodríguez Solano"
+descripcion: "Ingeniero electrónico: proyectos de embebidos, IoT, PCB, diseño mecánico e IA generativa, con tutoriales paso a paso."
+ubicacion: "Querétaro, México · de Colombia"
+email: "jehisonandresr@gmail.com"
+github: "Andres081610"
+youtube: ""        # ej: "@tucanal"
+linkedin: ""       # ej: "tu-usuario"
+lang: es
+
+# Si publicas en https://usuario.github.io/nombre-repo deja baseurl: "/nombre-repo"
+# Si publicas en https://usuario.github.io deja baseurl: ""
+baseurl: ""
+url: "https://andres081610.github.io"
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+collections:
+  proyectos:
+    output: true
+    permalink: /proyectos/:name/
+  tutoriales:
+    output: true
+    permalink: /tutoriales/:name/
+
+defaults:
+  - scope: { path: "", type: proyectos }
+    values: { layout: proyecto }
+  - scope: { path: "", type: tutoriales }
+    values: { layout: tutorial }
+  - scope: { path: "" }
+    values: { layout: default }
+
+exclude: [README.md, CRITICA-UX.md, Gemfile, Gemfile.lock, vendor, PLANTILLA-proyecto.md, PLANTILLA-tutorial.md]

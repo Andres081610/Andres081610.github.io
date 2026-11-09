@@ -1,0 +1,7 @@
+<a class="card spot" href="{{ include.t.url | relative_url }}" data-tags="{{ include.t.tags | join: ',' | downcase }}">
+  <span class="card-top mono"><span class="nivel nivel-{{ include.t.nivel | slugify }}">{{ include.t.nivel }}</span><span>⏱ {{ include.t.duracion }}</span></span>
+  <strong>{{ include.t.titulo }}</strong>
+  <em>{{ include.t.resumen }}</em>
+  <span class="tags">{% for tg in include.t.tags %}<span class="tag">{{ tg }}</span>{% endfor %}</span>
+  <span class="card-cta mono">Leer tutorial <span aria-hidden="true">→</span></span>
+</a>

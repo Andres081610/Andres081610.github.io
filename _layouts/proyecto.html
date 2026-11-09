@@ -1,0 +1,62 @@
+---
+layout: default
+---
+{% assign docs = site.proyectos | sort: "numero" %}
+{% for d in docs %}{% if d.url == page.url %}{% assign i = forloop.index0 %}{% endif %}{% endfor %}
+{% assign prev_i = i | minus: 1 %}{% assign next_i = i | plus: 1 %}
+<div class="progress" aria-hidden="true"><span data-progress></span></div>
+<article class="wrap entry">
+  <header class="entry-head">
+    <div class="meta-block">
+      <span class="num">{{ page.numero | prepend: "00" | slice: -2, 2 }}</span>
+      <dl>
+        <div><dt>Tipo</dt><dd>Proyecto</dd></div>
+        <div><dt>Área</dt><dd>{{ page.categoria }}</dd></div>
+        <div><dt>Fecha</dt><dd>{{ page.date | date: "%m/%Y" }}</dd></div>
+        <div><dt>Estado</dt><dd><span class="estado estado-{{ page.estado | slugify }}">{{ page.estado }}</span></dd></div>
+      </dl>
+    </div>
+    <h1>{{ page.titulo }}</h1>
+    <p class="lead">{{ page.resumen }}</p>
+    <p class="tags">{% for t in page.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+    <p class="actions">
+      {% if page.repo %}<a class="btn" href="{{ page.repo }}">Código / archivos ↗</a>{% endif %}
+      {% if page.descargas %}{% for f in page.descargas %}<a class="btn ghost" href="{{ f.archivo | relative_url }}">{{ f.nombre }} ↓</a>{% endfor %}{% endif %}
+    </p>
+  </header>
+
+  {% if page.portada %}<figure class="cover"><img src="{{ page.portada | relative_url }}" alt="{{ page.titulo }}" data-zoom></figure>{% endif %}
+
+  <div class="entry-grid">
+    <div class="prose">
+      {% if page.video and page.video != "" %}<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{{ page.video }}" title="Video de {{ page.titulo }}" allowfullscreen loading="lazy"></iframe></div>{% endif %}
+      {{ content }}
+    </div>
+    {% if page.componentes %}
+    <aside class="spec">
+      <h2>Lista de materiales</h2>
+      <table>
+        <thead><tr><th>Cant.</th><th>Componente</th></tr></thead>
+        <tbody>{% for c in page.componentes %}<tr><td>{{ c.cant }}</td><td>{{ c.nombre }}</td></tr>{% endfor %}</tbody>
+      </table>
+      {% if page.herramientas %}<h2>Herramientas</h2><ul>{% for h in page.herramientas %}<li>{{ h }}</li>{% endfor %}</ul>{% endif %}
+    </aside>
+    {% endif %}
+  </div>
+
+  {% if page.galeria %}
+  <section class="gallery-sec">
+    <h2 class="sec-title"><span>Galería</span><small>{{ page.galeria | size }} {% if page.galeria.size == 1 %}imagen{% else %}imágenes{% endif %} · clic para ampliar</small></h2>
+    <div class="gallery">
+      {% for g in page.galeria %}
+      <figure><img src="{{ g.imagen | relative_url }}" alt="{{ g.pie }}" loading="lazy" data-zoom><figcaption>{{ g.pie }}</figcaption></figure>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <nav class="pager">
+    <a href="{{ '/proyectos/' | relative_url }}">← Todos los proyectos</a>
+    {% if next_i < docs.size %}{% assign n = docs[next_i] %}<a class="next" href="{{ n.url | relative_url }}">Siguiente: {{ n.numero | prepend: "00" | slice: -2, 2 }} {{ n.titulo }} →</a>{% endif %}
+  </nav>
+</article>

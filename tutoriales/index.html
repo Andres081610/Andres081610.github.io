@@ -1,0 +1,18 @@
+---
+layout: default
+title: Tutoriales
+---
+{% assign tutoriales = site.tutoriales | sort: "date" | reverse %}
+{% assign all = "" | split: "" %}{% for t in tutoriales %}{% assign all = all | concat: t.tags %}{% endfor %}
+{% assign tags = all | uniq | sort %}
+<section class="wrap">
+  <header class="list-head"><p class="kicker mono">// aprende</p><h1>Tutoriales</h1>
+  <p class="lead">Guías paso a paso, de lo básico a lo avanzado.</p></header>
+  <input class="search" type="search" placeholder="Buscar tutorial…" data-search aria-label="Buscar tutorial">
+  <div class="filters" data-filters>
+    <button class="chip" aria-pressed="true" data-f="*">Todos</button>
+    {% for t in tags %}<button class="chip" aria-pressed="false" data-f="{{ t | downcase }}">{{ t }}</button>{% endfor %}
+  </div>
+  <div class="cards">{% for t in tutoriales %}{% include tarjeta-tutorial.html t=t %}{% endfor %}</div>
+  <p class="empty" hidden data-empty>No hay tutoriales con ese filtro.</p>
+</section>

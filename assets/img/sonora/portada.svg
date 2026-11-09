@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="monospace">
+<defs><linearGradient id="a" x1="0" x2="1"><stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#ff2bd6"/></linearGradient>
+<filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect width="960" height="600" fill="#05070d"/>
+<rect x="40" y="40" width="200" height="520" rx="14" fill="#0c1222" stroke="#1d2a44"/>
+<g fill="#8a9bbb" font-size="15"><text x="64" y="90" fill="#e8f1ff" font-weight="bold" font-size="20">♪ Sonora</text><text x="64" y="140" fill="#00f0ff">Inicio</text><text x="64" y="175">Buscar</text><text x="64" y="210">Me gusta</text><text x="64" y="245">Playlists</text><text x="64" y="280">Archive</text></g>
+<text x="280" y="90" fill="#e8f1ff" font-size="24" font-weight="bold">Buenas noches</text>
+<g>
+<rect x="280" y="120" width="190" height="190" rx="12" fill="url(#a)" opacity=".85"/><rect x="490" y="120" width="190" height="190" rx="12" fill="#1a2440"/><rect x="700" y="120" width="190" height="190" rx="12" fill="#2a1840"/>
+<circle cx="585" cy="215" r="50" fill="none" stroke="#00f0ff" stroke-width="3" filter="url(#g)"/><circle cx="795" cy="215" r="50" fill="none" stroke="#ff2bd6" stroke-width="3" filter="url(#g)"/>
+</g>
+<g fill="#8a9bbb" font-size="13"><text x="280" y="335">Éxitos del momento</text><text x="490" y="335">Dominio público</text><text x="700" y="335">Indie · Jamendo</text></g>
+<rect x="280" y="470" width="610" height="90" rx="14" fill="#0c1222" stroke="#1d2a44"/>
+<circle cx="585" cy="505" r="18" fill="#00f0ff" filter="url(#g)"/><path d="M579 496L593 505L579 514Z" fill="#05070d"/>
+<rect x="320" y="535" width="530" height="4" rx="2" fill="#1d2a44"/><rect x="320" y="535" width="230" height="4" rx="2" fill="url(#a)"/>
+<g stroke="url(#a)" stroke-width="5" stroke-linecap="round">
+<path d="M300 420v-30M320 420v-50M340 420v-20M360 420v-60M380 420v-35M400 420v-45M420 420v-15M440 420v-55M460 420v-30M480 420v-40M500 420v-25M520 420v-50M540 420v-20M560 420v-35"/></g>
+<text x="600" y="420" fill="#e8f1ff" font-size="16">React · TypeScript · Cloudflare</text>
+</svg>

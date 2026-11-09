@@ -1,0 +1,23 @@
+---
+layout: default
+title: Proyectos
+---
+{% assign proyectos = site.proyectos | sort: "numero" %}
+{% assign cats = proyectos | map: "categoria" | uniq %}
+<section class="wrap">
+  <header class="list-head"><p class="kicker mono">// archivo</p><h1>Proyectos</h1>
+  <p class="lead">Cada proyecto incluye descripción, lista de materiales, esquemas, código y fotos del montaje.</p></header>
+  <div class="filters" data-filters>
+    <button class="chip" aria-pressed="true" data-f="*">Todos</button>
+    {% for c in cats %}<button class="chip" aria-pressed="false" data-f="{{ c | downcase }}">{{ c }}</button>{% endfor %}
+  </div>
+  <div class="cards projects">
+    {% for p in proyectos %}
+    <a class="card proj spot" href="{{ p.url | relative_url }}" data-tags="{{ p.categoria | downcase }}">
+      {% if p.portada %}<img src="{{ p.portada | relative_url }}" alt="" loading="lazy">{% endif %}
+      <span class="card-top mono"><span>{{ p.numero | prepend: "00" | slice: -2, 2 }} · {{ p.categoria }}</span><span class="estado estado-{{ p.estado | slugify }}">{{ p.estado }}</span></span>
+      <strong>{{ p.titulo }}</strong><em>{{ p.resumen }}</em>
+    </a>
+    {% endfor %}
+  </div>
+</section>

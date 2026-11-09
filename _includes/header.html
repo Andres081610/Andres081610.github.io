@@ -1,0 +1,14 @@
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="{{ '/' | relative_url }}"><span class="logo-mark" aria-hidden="true"></span>{{ site.title }}</a>
+    <button class="menu-btn" aria-label="Abrir menú" aria-expanded="false" data-menu>☰</button>
+    <nav class="nav" data-nav>
+      {% assign p = page.url %}
+      <a href="{{ '/proyectos/' | relative_url }}" {% if p contains '/proyectos/' %}aria-current="page"{% endif %}>Proyectos</a>
+      <a href="{{ '/tutoriales/' | relative_url }}" {% if p contains '/tutoriales/' %}aria-current="page"{% endif %}>Tutoriales</a>
+      <a href="{{ '/sobre/' | relative_url }}" {% if p contains '/sobre/' %}aria-current="page"{% endif %}>Sobre mí</a>
+      <a href="{{ '/contacto/' | relative_url }}" {% if p contains '/contacto/' %}aria-current="page"{% endif %}>Contacto</a>
+    </nav>
+  </div>
+</header>

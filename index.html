@@ -1,0 +1,75 @@
+---
+layout: default
+---
+{% assign proyectos = site.proyectos | sort: "numero" %}
+{% assign tutoriales = site.tutoriales | sort: "date" | reverse %}
+<section class="hero wrap">
+  <canvas class="hero-canvas" aria-hidden="true" data-circuit></canvas>
+  <p class="badge mono"><span class="pulse"></span>Disponible para colaborar</p>
+  <h1 class="glitch" data-text="{{ site.nombre_corto | upcase }}">{{ site.nombre_corto | upcase }}</h1>
+  <p class="hero-sub">Ingeniero electrónico. Construyo <span class="grad">hardware, IoT e IA</span><span class="cursor" aria-hidden="true">_</span></p>
+  <p class="lead">Embebidos, PCB, diseño mecánico e IA generativa. Aquí documento mis proyectos con esquemas, código y decisiones de ingeniería, y escribo tutoriales para que tú también puedas construirlos.</p>
+  <p class="actions"><a class="btn" href="#proyectos">Explorar proyectos <span aria-hidden="true">→</span></a><a class="btn ghost" href="{{ '/tutoriales/' | relative_url }}">Aprender conmigo</a></p>
+  <div class="stats mono"><div><b data-count="{{ proyectos | size }}">{{ proyectos | size }}</b>proyectos</div><div><b data-count="{{ site.tutoriales | size }}">{{ site.tutoriales | size }}</b>tutoriales</div><div><b>CSWP</b>SOLIDWORKS</div></div>
+  <a class="scroll-hint mono" href="#proyectos" aria-label="Bajar a proyectos">scroll<span></span></a>
+</section>
+
+<div class="marquee" aria-label="Tecnologías que uso">
+  <div class="marquee-track mono">
+    {% assign stack = "ESP32,Arduino,STM32,LoRaWAN,KiCad,EasyEDA,LTspice,Proteus,SOLIDWORKS,ANSYS,MATLAB / Simulink,LabVIEW,Python,PyTorch,JAX,Impresión 3D" | split: "," %}
+    {% for i in (1..2) %}{% for s in stack %}<span>{{ s }}</span>{% endfor %}{% endfor %}
+  </div>
+</div>
+
+<section id="proyectos" class="wrap">
+  <h2 class="sec-title"><span>Proyectos destacados</span><a href="{{ '/proyectos/' | relative_url }}">Ver los {{ proyectos | size }} →</a></h2>
+  <div class="bento">
+    {% for p in proyectos limit:5 %}
+    <a class="bento-item spot{% if forloop.first %} big{% endif %}" href="{{ p.url | relative_url }}">
+      {% if p.portada %}<img src="{{ p.portada | relative_url }}" alt="" loading="lazy">{% endif %}
+      <span class="bento-info">
+        <span class="card-top mono"><span><b class="n">{{ p.numero | prepend: "00" | slice: -2, 2 }}</b> · {{ p.categoria }}</span><span class="estado estado-{{ p.estado | slugify }}">{{ p.estado }}</span></span>
+        <strong>{{ p.titulo }}</strong>
+        {% if forloop.first %}<em>{{ p.resumen }}</em>{% endif %}
+        <span class="tags">{% for t in p.tags limit:4 %}<span class="tag">{{ t }}</span>{% endfor %}</span>
+      </span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="sec-title"><span>Qué hago</span></h2>
+  <div class="services">
+    <div class="service spot">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 1v4M15 1v4M9 19v4M15 19v4M1 9h4M1 15h4M19 9h4M19 15h4"/></svg>
+      <h3>Hardware y PCB</h3><p>Instrumentación, acondicionamiento de señal y diseño de placas en KiCad, del esquemático a la fabricación.</p>
+    </div>
+    <div class="service spot">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0"/><circle cx="12" cy="19.5" r="1.5"/></svg>
+      <h3>Embebidos e IoT</h3><p>Firmware para ESP32, STM32 y Arduino, telemetría, LoRaWAN y dispositivos de bajo consumo.</p>
+    </div>
+    <div class="service spot">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg>
+      <h3>Diseño mecánico</h3><p>Modelado en SOLIDWORKS (CSWP), análisis por elementos finitos e impresión 3D de prototipos.</p>
+    </div>
+    <div class="service spot">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M5 19l3-3M16 8l3-3"/></svg>
+      <h3>IA y datos</h3><p>Modelos generativos (difusión, VAE, GAN), análisis de datos y simulación en MATLAB/Simulink.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="sec-title"><span>Tutoriales recientes</span><a href="{{ '/tutoriales/' | relative_url }}">Ver todos →</a></h2>
+  <div class="cards">
+    {% for t in tutoriales limit:3 %}{% include tarjeta-tutorial.html t=t %}{% endfor %}
+  </div>
+</section>
+
+<section class="wrap cta">
+  <p class="kicker mono">// siguiente paso</p>
+  <h2>¿Tienes una idea o un proyecto en mente?</h2>
+  <p class="lead">Hablemos. Me encanta colaborar, resolver dudas y construir cosas nuevas.</p>
+  <p class="actions"><a class="btn" href="mailto:{{ site.email }}">Escríbeme</a><a class="btn ghost" href="{{ '/sobre/' | relative_url }}">Conóceme</a></p>
+</section>

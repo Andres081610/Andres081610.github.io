@@ -1,0 +1,12 @@
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p>© {{ site.time | date: "%Y" }} {{ site.autor }}. Esquemas, código y fotos propios salvo que se indique otra cosa.</p>
+    <p class="social">
+      {% if site.github != "" %}<a href="https://github.com/{{ site.github }}">GitHub</a>{% endif %}
+      {% if site.youtube != "" %}<a href="https://youtube.com/{{ site.youtube }}">YouTube</a>{% endif %}
+      {% if site.linkedin != "" %}<a href="https://linkedin.com/in/{{ site.linkedin }}">LinkedIn</a>{% endif %}
+      <a href="mailto:{{ site.email }}">Correo</a>
+    </p>
+  </div>
+<a class="to-top" href="#contenido" aria-label="Volver arriba" data-top>↑</a>
+</footer>

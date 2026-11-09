@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<div class="progress" aria-hidden="true"><span data-progress></span></div>
+<article class="wrap entry">
+  <header class="entry-head">
+    <div class="meta-block">
+      <span class="num">T</span>
+      <dl>
+        <div><dt>Tipo</dt><dd>Tutorial</dd></div>
+        <div><dt>Nivel</dt><dd>{{ page.nivel }}</dd></div>
+        <div><dt>Tiempo</dt><dd>{{ page.duracion }}</dd></div>
+        <div><dt>Lectura</dt><dd>{{ content | number_of_words | divided_by: 180 | plus: 1 }} min</dd></div>
+        <div><dt>Publicado</dt><dd>{{ page.date | date: "%d/%m/%Y" }}</dd></div>
+      </dl>
+    </div>
+    <h1>{{ page.titulo }}</h1>
+    <p class="lead">{{ page.resumen }}</p>
+    <p class="tags">{% for t in page.tags %}<span class="tag">{{ t }}</span>{% endfor %}</p>
+  </header>
+  <div class="entry-grid">
+    <div class="prose">
+      {% if page.video and page.video != "" %}<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{{ page.video }}" title="Video" allowfullscreen loading="lazy"></iframe></div>{% endif %}
+      {{ content }}
+    </div>
+    <aside class="spec toc-box">
+      <h2>En este tutorial</h2>
+      <ol data-toc></ol>
+      {% if page.requisitos %}<h2>Necesitas</h2><ul>{% for r in page.requisitos %}<li>{{ r }}</li>{% endfor %}</ul>{% endif %}
+    </aside>
+  </div>
+  <nav class="pager"><a href="{{ '/tutoriales/' | relative_url }}">← Todos los tutoriales</a></nav>
+</article>
