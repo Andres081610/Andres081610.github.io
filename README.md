@@ -47,4 +47,6 @@ bundle exec jekyll serve
 - Ficha por proyecto: estado, área, fecha, lista de materiales, herramientas, enlace al código, video de YouTube y galería con visor (flechas ← → y Esc).
 - Navegación "Siguiente proyecto".
 - Tutoriales con nivel, duración, buscador, filtros por etiqueta e índice automático.
+- Página de tutorías y asesorías (`asesorias/index.html`) con formulario que arma un correo prellenado.
+- Sitemap, robots.txt, página 404, favicon e imagen para redes sociales.
 - Resaltado de código, modo claro/oscuro, diseño adaptado a celular.

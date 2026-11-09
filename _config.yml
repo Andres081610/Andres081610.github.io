@@ -37,4 +37,7 @@ defaults:
   - scope: { path: "" }
     values: { layout: default }
 
-exclude: [README.md, CRITICA-UX.md, Gemfile, Gemfile.lock, vendor, PLANTILLA-proyecto.md, PLANTILLA-tutorial.md]
+exclude: [README.md, CRITICA-UX.md, CNAME, Gemfile, Gemfile.lock, vendor, PLANTILLA-proyecto.md, PLANTILLA-tutorial.md]
+
+plugins:
+  - jekyll-sitemap

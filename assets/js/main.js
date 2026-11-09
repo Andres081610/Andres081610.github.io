@@ -3,6 +3,14 @@
   var mb=document.querySelector('[data-menu]'),nav=document.querySelector('[data-nav]');
   if(mb)mb.onclick=function(){var o=nav.classList.toggle('open');mb.setAttribute('aria-expanded',o)};
   var still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // formulario de tutorías → correo prellenado
+  var tf=document.querySelector('[data-tform]');
+  if(tf){document.querySelectorAll('[data-plan]').forEach(function(a){a.addEventListener('click',function(){var m=tf.querySelector('[name=modalidad]');if(m)m.value=a.dataset.plan})});
+    tf.addEventListener('submit',function(e){e.preventDefault();var f=new FormData(tf);
+      var subject='Tutoría: '+f.get('tipo')+' ('+f.get('modalidad')+')';
+      var body='Hola Andrés,\n\nMe llamo '+f.get('nombre')+' ('+f.get('correo')+').\n\nTipo de ayuda: '+f.get('tipo')+'\nModalidad: '+f.get('modalidad')+'\nNivel: '+f.get('nivel')+'\nPara cuándo: '+(f.get('fecha')||'-')+'\n\n'+f.get('detalle')+'\n\n(Adjunto fotos o archivos si es necesario.)';
+      location.href='mailto:'+tf.dataset.email+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+      var ok=tf.querySelector('[data-form-ok]');if(ok)ok.hidden=false});}
   // brillo que sigue el mouse
   document.querySelectorAll('.spot').forEach(function(el){el.addEventListener('pointermove',function(e){var r=el.getBoundingClientRect();
     el.style.setProperty('--mx',(e.clientX-r.left)+'px');el.style.setProperty('--my',(e.clientY-r.top)+'px')})});
@@ -16,7 +24,7 @@
     if(pg)pg.style.width=(max>0?h.scrollTop/max*100:0)+'%';if(top)top.classList.toggle('show',h.scrollTop>600)}
   addEventListener('scroll',onScroll,{passive:true});onScroll();
   // aparición al hacer scroll
-  var rv=document.querySelectorAll('.bento-item,.service,.card,.gallery figure,.sec-title,.cta');
+  var rv=document.querySelectorAll('.bento-item,.service,.card,.gallery figure,.sec-title,.cta,.plan,.steps li,.tutor-band');
   if('IntersectionObserver' in window&&!still){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
     rv.forEach(function(el){el.classList.add('reveal');io.observe(el)})}
   // animación de circuito en la portada

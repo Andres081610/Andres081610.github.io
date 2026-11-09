@@ -8,7 +8,15 @@
   <meta name="description" content="{{ page.resumen | default: site.descripcion | strip_html | truncate: 160 }}">
   <meta property="og:title" content="{{ t | default: site.title }}">
   <meta property="og:description" content="{{ page.resumen | default: site.descripcion | strip_html | truncate: 160 }}">
-  {% if page.portada %}<meta property="og:image" content="{{ page.portada | absolute_url }}">{% endif %}
+  {% assign ogimg = page.portada | default: '/assets/img/social.jpg' %}{% if ogimg contains '.svg' %}{% assign ogimg = '/assets/img/social.jpg' %}{% endif %}
+  <meta property="og:image" content="{{ ogimg | absolute_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="author" content="{{ site.nombre_completo }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="icon" href="{{ '/assets/img/favicon.svg' | relative_url }}" type="image/svg+xml">
   <meta name="theme-color" content="#05070d">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

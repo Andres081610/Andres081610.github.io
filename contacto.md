@@ -10,4 +10,6 @@ permalink: /contacto/
 - **GitHub:** [github.com/{{ site.github }}](https://github.com/{{ site.github }})
 - **Ubicación:** {{ site.ubicacion }}
 
+¿Buscas una tutoría o ayuda con un circuito? Usa el [formulario de tutorías]({{ '/asesorias/' | relative_url }}#agendar).
+
 Respondo normalmente en uno o dos días.
